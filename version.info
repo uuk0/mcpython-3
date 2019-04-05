@@ -1,0 +1,42 @@
+
+19w14:
+    Code Organisation:
+        Splitted code into diffrent files
+        added tmp-folder
+
+    Chunks:
+        new intern chunk format: cx, cz instead cx, _, cz
+
+    Interaction:
+        added mouse-middle support
+        added r-key for reseting some stuff
+        longer SPACE press will let you jump when you hit the ground again
+
+    Block:
+        added Registry for Blocks
+        added new Blocks: Bedrock, Stone, Dirt, Gravel & Sand (both not falling), Oak Log, Oak Leaves, Stone Slab
+
+    World Generation:
+        added vanilla-like world gen with:
+            added Biomes (Ocean (deactivated), Plains, Dessert, Dessert Hills
+            added Structures (Oak Tree)
+            seed-based
+
+    Textures:
+        added ImageAtlas
+        added TextureFactory
+
+    Models:
+        added Models for blocks definiting EXACTLY how to render an block
+        these data is also used for hitboxes
+        you can also say if it should be rendered with alpha or not
+ 
+    Inventorys:
+         implemented some core for Inventory
+
+    Player:
+         added Player-class
+         Eyes high is now 0.5 higher
+
+    Items:
+         added Registry for items

@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:dirt",
+  "files": ["assets/textures/block/dirt.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

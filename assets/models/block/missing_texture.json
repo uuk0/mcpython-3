@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:missing_texture",
+  "files": ["tmp/missing_texture.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

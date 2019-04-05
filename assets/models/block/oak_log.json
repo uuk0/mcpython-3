@@ -1,0 +1,11 @@
+{
+  "name": "minecraft:oak_log",
+  "files": ["assets/textures/block/oak_log_top.png",
+  "assets/textures/block/oak_log.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 1, 1, 1, 1]
+    }
+  ]
+}

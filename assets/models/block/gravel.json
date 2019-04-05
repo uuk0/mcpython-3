@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:gravel",
+  "files": ["assets/textures/block/gravel.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "minecraft:sandstone",
+  "files": ["assets/textures/block/sandstone_bottom.png",
+"assets/textures/block/sandstone_top.png",
+"assets/textures/block/sandstone.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [1, 0, 2, 2, 2, 2]
+    }
+  ]
+}

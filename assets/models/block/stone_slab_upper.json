@@ -1,0 +1,24 @@
+{
+  "name": "minecraft:stone_slab_upper",
+  "files": ["assets/textures/block/stone.png"],
+  "changes": [
+    {
+      "type": "crop",
+      "files": 0,
+      "arguments": [[[0, 0, 15, 7]]]
+    },
+    {
+      "type": "resize",
+      "files": 1,
+      "arguments": [[64, 64]]
+    }
+  ],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 2, 2, 2, 2],
+      "box_size": [0.5, 0.25, 0.5],
+      "relative_position": [0, 0.25, 0]
+    }
+  ]
+}

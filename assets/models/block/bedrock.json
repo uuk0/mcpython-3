@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:bedrock",
+  "files": ["assets/textures/block/bedrock.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

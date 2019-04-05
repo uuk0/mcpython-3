@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:sand",
+  "files": ["assets/textures/block/sand.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}
