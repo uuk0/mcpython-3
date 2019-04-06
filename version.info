@@ -40,3 +40,4 @@
 
     Items:
          added Registry for items
+         added System for generating items onto startup
