@@ -39,3 +39,22 @@ class IBlock:
 
     def get_model_name(self):
         return self.getName()
+
+    def can_interact_with(self, itemstack, mousekey=None, mousemod=None):
+        """
+        callen when an item is used onto the block
+        """
+        return False
+
+    def on_interact_with(self, itemstack, mousekey=None, mousemod=None):
+        """
+        callen to interact with the given item
+        :return: (either the itemstack or the itemstack to replace with, do some more work)
+        """
+        return itemstack, True
+
+    def get_drop(self):
+        """
+        :return: an itemname: amount dict that should be given to player
+        """
+        return {self.getName(): 1}

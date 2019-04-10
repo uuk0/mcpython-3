@@ -1,22 +1,106 @@
-# mcpython-3
-Mcpython is an minecraft clone written in pure python using pyglet as an OpenGL-binding
+# Minecraft
 
-# Credits
-the project is based on code from fogleman (can be found on https://github.com/fogleman/Minecraft)
-it uses code segments from serval tutorials and wiki pages
+Simple Minecraft-inspired demo written in Python and Pyglet.
 
-# Project code
-The Project is published at the moment in its raw form. No compilation, no obfuscation.
-Please install Python 3.7.3 (tested), the libarys pyglet, pillow and simplexnoise and the code from this repo in order to play.
+http://www.youtube.com/watch?v=kC3lwK631X8
 
-# How to play
-When you start the game, you will see at the beginning an screen swithing between all blocks in the game.
-Do not wonder, we are generting some pictures on startup. If you have some better code to do that (transform the blocks into reprsenting item files), please write to me.
+**Like this project?**
 
-The world generation is printed out into the consol. Per default, 3x3 chunks will be generated.
+You might also like my other Minecraft clone written in C using modern OpenGL (GL shader language). It performs better, has better terrain generation and saves state to a sqlite database. See here:
 
-You can select blocks via 1-9 (not all accessable) or by simply clicking on the block with mouse middle
+https://github.com/fogleman/Craft
 
-# Add new content
+## Goals and Vision
 
-You can easely add new blocks by simply adding an model.json and load it and create an class extending Block.IBlock
+I would like to see this project turn into an educational tool. Kids love Minecraft and Python is a great first language.
+This is a good opportunity to get children excited about programming.
+
+The code should become well commented and more easily configurable. It should be easy to make some simple changes
+and see the results quickly.
+
+I think it would be great to turn the project into more of a library / API... a Python package that you import and then
+use / configure to setup a world and run it. Something along these lines...
+
+
+```python
+import mc
+
+world = mc.World(...)
+world.set_block(x, y, z, mc.DIRT)
+mc.run(world)
+```
+
+The API could contain functionality for the following:
+
+- Easily configurable parameters like gravity, jump velocity, walking speed, etc.
+- Hooks for terrain generation.
+
+## How to Run
+
+```shell
+pip install pyglet
+git clone https://github.com/fogleman/Minecraft.git
+cd Minecraft
+python main.py
+```
+
+### Mac
+
+On Mac OS X, you may have an issue with running Pyglet in 64-bit mode. Try running Python in 32-bit mode first:
+
+```shell
+arch -i386 python main.py
+```
+
+If that doesn't work, set Python to run in 32-bit mode by default:
+
+```shell
+defaults write com.apple.versioner.python Prefer-32-Bit -bool yes 
+```
+
+This assumes you are using the OS X default Python.  Works on Lion 10.7 with the default Python 2.7, and may work on other versions too.  Please raise an issue if not.
+    
+Or try Pyglet 1.2 alpha, which supports 64-bit mode:  
+
+```shell
+pip install https://pyglet.googlecode.com/files/pyglet-1.2alpha1.tar.gz 
+```
+
+### If you don't have pip or git
+
+For pip:
+
+- Mac or Linux: install with `sudo easy_install pip` (Mac or Linux) - or (Linux) find a package called something like 'python-pip' in your package manager.
+- Windows: [install Distribute then Pip](http://stackoverflow.com/a/12476379/992887) using the linked .MSI installers.
+
+For git:
+
+- Mac: install [Homebrew](http://mxcl.github.com/homebrew/) first, then `brew install git`.
+- Windows or Linux: see [Installing Git](http://git-scm.com/book/en/Getting-Started-Installing-Git) from the _Pro Git_ book.
+
+See the [wiki](https://github.com/fogleman/Minecraft/wiki) for this project to install Python, and other tips.
+
+## How to Play
+
+### Moving
+
+- W: forward
+- S: back
+- A: strafe left
+- D: strafe right
+- Mouse: look around
+- Space: jump
+- Tab: toggle flying mode
+
+### Building
+
+- Selecting type of block to create:
+    - 1: brick
+    - 2: grass
+    - 3: sand
+- Mouse left-click: remove block
+- Mouse right-click: create block
+
+### Quitting
+
+- ESC: release mouse, then close window

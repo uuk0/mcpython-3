@@ -1,4 +1,5 @@
 import globals as G
+import importlib, os
 
 
 class BlockHandler:
@@ -23,4 +24,7 @@ class BlockHandler:
 G.blockhandler = BlockHandler()
 
 
-from . import grass, sand, brick, stone, bedrock, dirt, gravel, OakLog, oak_leaves, sandstone, stone_slab
+for file in os.listdir(G.local+"/Block"):
+    if file.startswith("Block") and not file in ["BlockHandler.py"]:
+        importlib.import_module("Block."+str(file.split(".")[0]))
+

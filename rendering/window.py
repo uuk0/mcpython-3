@@ -7,6 +7,8 @@ import texture.BlockItemFactory
 
 from pyglet.window import key, mouse
 
+import gui.ItemStack
+
 
 class Window(pyglet.window.Window):
 
@@ -60,19 +62,15 @@ class Window(pyglet.window.Window):
         # Velocity in the y (upward) direction.
         self.dy = 0
 
-        # A list of blocks the player can place. Hit num keys to cycle.
-        self.inventory = ["brick", "sand", "grass"]
-
-        # The current block the user can place. Hit num keys to cycle.
-        self.block = self.inventory[0]
-
         # Convenience list of num keys.
         self.num_keys = [
             key._1, key._2, key._3, key._4, key._5,
-            key._6, key._7, key._8, key._9, key._0]
+            key._6, key._7, key._8, key._9]
 
         # Instance of the model that handles the world.
         self.model = world.model.Model()
+
+        self.counter = 0
 
         # The label that is displayed in the top left of the canvas.
         self.label = pyglet.text.Label('', font_name='Arial', font_size=9,
@@ -176,6 +174,8 @@ class Window(pyglet.window.Window):
         # print(self.time_since_on_ground)
         if G.inventoryhandler.should_game_freeze():
             G.inventoryhandler.send_event("update", dt)
+        if self.position[1] < -100:
+            G.player.kill()
 
     def _update(self, dt):
         """ Private implementation of the `update()` method. This is where most
@@ -223,6 +223,7 @@ class Window(pyglet.window.Window):
             The new position of the player taking into account collisions.
 
         """
+        if G.player.gamemode == 3: return position
         # How much overlap with a dimension of a surrounding block you need to
         # have to count as a collision. If 0, touching terrain at all counts as
         # a collision. If .49, you sink into the ground, as if walking through
@@ -282,19 +283,43 @@ class Window(pyglet.window.Window):
         if self.exclusive:
             vector = self.get_sight_vector()
             block, previous = self.model.hit_test(self.position, vector)
+            iblock = self.model.world[block] if block in self.model.world else None
+            if iblock and iblock.can_interact_with(
+                    G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[G.player.selectedinventoryslot].get_stack(),
+                    button, modifiers):
+                v = iblock.on_interact_with(
+                    G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[G.player.selectedinventoryslot].get_stack(),
+                    button, modifiers
+                )
+                G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[G.player.selectedinventoryslot].set_stack(v[0])
+                if not v[1]: return
             if (button == mouse.RIGHT) or \
                     ((button == mouse.LEFT) and (modifiers & key.MOD_CTRL)):
                 # ON OSX, control + left click = right click.
-                if previous:
-                    self.model.add_block(previous, self.block)
+                if previous and G.player.gamemode in [0, 1]:
+                    slot = G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[G.player.selectedinventoryslot]
+                    if slot.stack.item:
+                        if slot.stack.item.has_block():
+                            self.model.add_block(previous, slot.stack.item.getBlockName())
+                        slot.stack.amount -= 1
+                    elif slot.stack.itemname:
+                        self.model.add_block(previous, slot.stack.itemname)
+                        slot.stack.amount -= 1
             elif button == pyglet.window.mouse.LEFT and block:
                 block = self.model.world[block]
-                if block.isBrakeAble():
-                    self.model.remove_block(block.position)
-            elif button == pyglet.window.mouse.MIDDLE and block:
+                if G.player.gamemode != 3:
+                    if G.player.gamemode != 1:
+                        if block.isBrakeAble() and G.player.gamemode == 0:
+                            self.model.remove_block(block.position)
+                            drop = iblock.get_drop()
+                            for itemname in drop.keys():
+                                G.player.add_to_free_place(itemname, drop[itemname])
+                    else:
+                        self.model.remove_block(block.position)
+            elif button == pyglet.window.mouse.MIDDLE and block and G.player.gamemode == 1:
                 block = self.model.world[block]
-                if block.isBrakeAble():
-                    self.block = block.getName()
+                slot = G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[G.player.selectedinventoryslot]
+                slot.stack.set_item(block.getName())
         else:
             self.set_exclusive_mouse(True)
 
@@ -353,18 +378,39 @@ class Window(pyglet.window.Window):
                 self.is_pressing_space = True
         elif symbol == key.ESCAPE:
             self.set_exclusive_mouse(False)
-        elif symbol == key.TAB:
+        elif symbol == key.TAB and G.player.gamemode == 1:
             self.flying = not self.flying
         elif symbol in self.num_keys:
-            index = (symbol - self.num_keys[0]) % len(self.inventory)
-            self.block = self.inventory[index]
+            index = (symbol - self.num_keys[0])
+            G.player.selectedinventoryslot = index
         elif symbol == key.E:
-            if G.model.player.playerinventory.get_mode() == "hotbar":
-                G.model.player.playerinventory.set_mode("inventory")
+            if G.player.playerinventory.get_mode() == "hotbar":
+                G.player.playerinventory.set_mode("inventory")
             else:
-                G.model.player.playerinventory.set_mode("hotbar")
+                G.player.playerinventory.set_mode("hotbar")
         elif symbol == key.R:
             self.strafe = [0, 0]
+        elif symbol == key.T:
+            G.inventoryhandler.show_inventory(G.player.chat)
+        elif symbol == key.C and G.player.gamemode == 1:
+            # for slot in G.player.playerinventory.POSSIBLE_MODES["inventory"].slots:
+            #     slot.set_item("minecraft:stone")
+            if modifiers & key.LSHIFT:
+                self.counter += 1
+                if self.counter > len(G.itemhandler.itemnames) // 9:
+                    self.counter = 0
+            elif modifiers & key.LALT:
+                self.counter -= 1
+                if self.counter < 0:
+                    self.counter = len(G.itemhandler.itemnames) // 9
+            else:
+                items = []
+                for i in range(self.counter*9, self.counter*9+9):
+                    if len(G.itemhandler.itemnames) > i:
+                        items.append(G.itemhandler.itemnames[i])
+                for i, itemname in enumerate(items):
+                    G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[i].\
+                        set_stack(gui.ItemStack.ItemStack(itemname, 64))
 
     def on_key_release(self, symbol, modifiers):
         """ Called when the player releases a key. See pyglet docs for key
@@ -476,6 +522,7 @@ class Window(pyglet.window.Window):
         crosshairs.
 
         """
+        if G.inventoryhandler.should_game_freeze(): return
         vector = self.get_sight_vector()
         block = self.model.hit_test(self.position, vector)[0]
         if block:
@@ -508,6 +555,28 @@ class Window(pyglet.window.Window):
         """ Draw the crosshairs in the center of the screen.
 
         """
+        if G.inventoryhandler.should_game_freeze(): return
         pyglet.gl.glColor3d(0, 0, 0)
         self.reticle.draw(pyglet.gl.GL_LINES)
+        
+    def on_hide(self):
+        if not G.inventoryhandler.should_game_freeze():
+            self.deactivate()
+
+    def on_context_lost(self):
+        if not G.inventoryhandler.should_game_freeze():
+            self.deactivate()
+
+    def on_context_state_lost(self):
+        if not G.inventoryhandler.should_game_freeze():
+            self.deactivate()
+
+    def on_deactivate(self):
+        if not G.inventoryhandler.should_game_freeze():
+            self.deactivate()
+
+    def deactivate(self):
+        self.set_exclusive_mouse(False)
+        self.strafe = [0, 0]
+        self.is_pressing_space = False
 

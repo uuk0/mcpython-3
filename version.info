@@ -1,4 +1,62 @@
 
+19w15:
+    World Generation:
+        tweaked some constants
+
+    Bug Fixes:
+        fixed bug: is_solid_face is not used in model exposed function
+        fixed bug: hotbar is black
+        fixed bugs around the new Slot/ItemStack/Inventory system
+        fixed bug: resize event is wrong handled by PlayerInventory
+        fixed bug: Slot is using wrong missing texture
+        fixed bug: "AttributeError: 'Slot' object has no attribute 'set_stac'" by handling slot stuff
+        fixed bug: spawnpoint is not high-map orientated
+        fixed bug: ModelHandler gives an exception when an model exception occured
+
+    Inventory:
+        hotbar is now 2x as big
+        moved hotbar to its right position
+        selected hotbar element wil now render at the position the playerindex point to
+        added slots to player inventory
+        stacks under 1 items will now be deleted in slots
+
+    Control:
+        num keys will now point to slots in the playerinventory
+        when the window is losing his context the window will be in the set_exculive_mouse(False)-mode
+        key "T" will now open chat
+
+    Rendering:
+        cross in the middle and focused block bounding will now not shown when the inventory blocks the game
+
+    Chat:
+        added chat-Inventory
+        after the last symbol, the text in chat have an blinking "_"
+
+    Commands:
+        added /give-command
+        added /clear-command
+        added /gamemode command
+
+    Player:
+        added gamemode
+    
+    Blocks:
+        added oak planks, cobblestone
+        added real drops to blocks
+        filled slabs with an full variant
+
+    Control:
+        added "Item-pages" for gamemode 1 for getting all posible items that are registered
+        you can switch between the item pages via C+SHIFT, C+ALT and give the page into hotbar with C
+
+    Item:
+        added stick, sapple
+
+    Gameplay
+        when you fall under -100, you will be automaticly killed
+        added build-limit under 0 and over 255 blocks
+
+
 19w14:
     Code Organisation:
         Splitted code into diffrent files

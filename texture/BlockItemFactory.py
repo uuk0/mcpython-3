@@ -23,6 +23,7 @@ class BlockItemFactory:
                 G.local+"/tmp/items/"+"_".join(self.blockname.split(":"))+".png")
             image = PIL.Image.open(G.local+"/tmp/items/"+"_".join(self.blockname.split(":"))+".png")
             image = image.crop((150, 60, 660, 515))
+            image = image.resize((32, 32))
             image.save(G.local+"/tmp/items/"+"_".join(self.blockname.split(":"))+".png")
             G.itemhandler.register([self.blockname, G.local+"/tmp/items/"+"_".join(self.blockname.split(":"))+".png"])
         if len(self.blocktable) == 0:
@@ -48,9 +49,9 @@ class BlockItemFactory:
     def close_M(self):
         G.inventoryhandler.hide_inventory(dummyinventoryblockitemfactory)
         G.model.initialize()
-        G.inventoryhandler.show_inventory(G.model.player.playerinventory)
-        G.model.player.playerinventory.set_mode("hotbar")
-        G.window.position = (0, 50, 0)
+        G.inventoryhandler.show_inventory(G.player.playerinventory)
+        G.player.playerinventory.set_mode("hotbar")
+        G.window.position = (0, G.model.worldgenerator.smooth_highmap[(0, 0)]+2, 0)
         G.window.rotation = (0, 0)
         pyglet.gl.glClearColor(0.5, 0.69, 1.0, 1)
         G.window.set_exclusive_mouse(True)

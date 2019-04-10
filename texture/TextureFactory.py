@@ -13,11 +13,17 @@ os.makedirs(G.local+"/tmp/gui/player")
 
 image = PIL.Image.open(G.local+"/assets/textures/gui/container/inventory.png")
 main = image.crop((0, 0, 176, 166))
+main = main.resize((main.size[0] * 2, main.size[1] * 2))
 main.save(G.local+"/tmp/gui/player/main.png")
 
 image = PIL.Image.open(G.local+"/assets/textures/gui/widgets.png")
 hotbar = image.crop((0, 0, 182, 22))
+hotbar = hotbar.resize((182 * 2, 22 * 2))
 hotbar.save(G.local+"/tmp/gui/player/hotbar.png")
+
+hotbar_select = image.crop((0, 23, 23, 45))
+hotbar_select = hotbar_select.resize((hotbar_select.size[0]*2, hotbar_select.size[0]*2))
+hotbar_select.save(G.local+"/tmp/gui/player/hotbar_select.png")
 
 # Missing Texture
 

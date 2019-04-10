@@ -5,11 +5,14 @@ class InventoryHandler:
     def __init__(self):
         self.inventorys = []
         self.visable_inventorys = []
+        self.overlaydraw = []
 
     def draw(self):
         if texture.BlockItemFactory.dummyinventoryblockitemfactory in self.visable_inventorys: return
         for inventory in self.visable_inventorys:
             inventory.draw()
+        for e in self.overlaydraw:
+            e.overlay_draw()
 
     def add_inventory(self, inventory):
         self.inventorys.append(inventory)
@@ -27,9 +30,10 @@ class InventoryHandler:
             G.window.strafe = [0, 0]
             G.window.is_pressing_space = False
 
-    def hide_inventory(self, inventory):
+    def hide_inventory(self, inventory, send=True):
         if inventory not in self.visable_inventorys: return
-        inventory.on_close()
+        if send:
+            inventory.on_close()
         self.visable_inventorys.remove(inventory)
 
     def should_game_freeze(self):

@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:oak_planks",
+  "files": ["assets/textures/block/oak_planks.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

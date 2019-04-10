@@ -6,6 +6,8 @@ import sys, os
 
 local = os.path.dirname(sys.argv[0])
 
+player = None
+
 
 CONFIG = {}
 
@@ -28,4 +30,10 @@ biomehandler = None
 texturechangerhandler = None
 
 inventoryhandler = None
+
+commandhandler = None
+
+commandparser = None
+
+craftinghandler = None
 

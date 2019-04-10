@@ -33,7 +33,7 @@ class ModelHandler:
         block = G.model.world[position]
         file = block.get_model_name()
         if file not in self.modelindex:
-            self.modelindex["minecraft:missing_texture"].entry[0].show(position)
+            self.modelindex["minecraft:missing_texture"].entrys[0].show(position)
         else:
             self.modelindex[block.get_model_name()].entrys[block.get_active_model_index()].show(position)
 
@@ -41,7 +41,7 @@ class ModelHandler:
         block = G.model.world[position]
         file = block.get_model_name()
         if file not in self.modelindex:
-            self.modelindex["minecraft:missing_texture"].entry[0].hide(position)
+            self.modelindex["minecraft:missing_texture"].entrys[0].hide(position)
         else:
             self.modelindex[block.get_model_name()].entrys[block.get_active_model_index()].hide(position)
 

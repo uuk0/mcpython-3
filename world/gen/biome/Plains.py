@@ -20,7 +20,7 @@ class Plains(world.gen.biome.IBiome.IBiome):
 
     @staticmethod
     def getStructurWeight():
-        return 120000
+        return 200000
 
     @staticmethod
     def getBaseHighVariation():

@@ -46,3 +46,9 @@ class Inventory:
     def should_activate_mouse(self):
         return self.should_be_closed_by_esc()
 
+    def get_setable_slots(self):
+        return self.slots
+
+    def overlay_draw(self):
+        raise RuntimeError()
+

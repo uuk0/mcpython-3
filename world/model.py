@@ -140,7 +140,7 @@ class Model(object):
                     if [dx, dy, dz].count(0) == 2:
                         npos = (x+dx, y+dy, z+dz)
                         if npos not in G.model.world: return True
-                        # if not G.model.world[npos].is_solid_to(position): return True
+                        if not G.model.world[npos].is_solid_to(position): return True
         return False
 
     def add_block(self, position, blockname, immediate=True):
@@ -155,6 +155,7 @@ class Model(object):
             Whether or not to draw the block immediately.
 
         """
+        if position[1] < 0 or position[1] > 255: return
         if position in self.world:
             self.remove_block(position, immediate)
         block = G.blockhandler.create_block_at(position, blockname)
