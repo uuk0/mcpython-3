@@ -79,7 +79,22 @@ class TextureTileGetter(ITextureChangeAble):
         for image in (images if type(images) in (tuple, list) else [images]):
             for area in (areas if type(areas[0]) in (tuple, list) else [areas]):
                 im = image.crop(area)
-                im.save(G.local+"/tmp/texture_tile_generated_"+str(TextureTileGetter.TILE_ID)+".png")
+                # im.save(G.local+"/tmp/texture_tile_generated_"+str(TextureTileGetter.TILE_ID)+".png")
                 results.append(im)  # G.local+"/tmp/texture_tile_generated_"+str(TextureTileGetter.TILE_ID)+".png")
                 TextureTileGetter.TILE_ID += 1
         return results
+
+
+@G.texturechangerhandler
+class TextureRotator(ITextureChangeAble):
+    @staticmethod
+    def getName() -> str:
+        return "rotate"
+
+    @staticmethod
+    def generate(images, rotation) -> list:
+        results = []
+        for image in (images if type(images) in (tuple, list) else [images]):
+            results.append(image.rotate(rotation))
+        return results
+

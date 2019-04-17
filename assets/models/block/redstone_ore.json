@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:redstone_ore",
+  "files": ["assets/textures/block/redstone_ore.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

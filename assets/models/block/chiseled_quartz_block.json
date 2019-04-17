@@ -1,0 +1,12 @@
+{
+  "name": "minecraft:chiseled_quartz_block",
+  "files": ["assets/textures/block/chiseled_quartz_block_top.png",
+  "assets/textures/block/chiseled_quartz_block.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 1, 1, 1, 1]
+    }
+  ]
+}
+

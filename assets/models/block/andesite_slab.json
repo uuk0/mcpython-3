@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:andesite_slab",
+  "files": ["assets/textures/block/andesite.png"],
+  "entrys": [
+    {
+      "name": "slab",
+      "side": 0, "top": 0
+    }
+  ]
+}

@@ -8,6 +8,6 @@ class Stone(Block.IBlock.IBlock):
     def getName():
         return "minecraft:stone"
 
-    def get_drop(self):
+    def get_drop(self, iitemstack):
         return {"minecraft:cobblestone": 1}
 

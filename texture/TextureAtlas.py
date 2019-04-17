@@ -2,6 +2,7 @@ import globals as G
 import PIL.Image
 import util.file
 import pyglet
+import modloader.ResourceLocator
 
 
 class TextureAtlasHandler:
@@ -47,7 +48,8 @@ class TextureAtlas:
         for file in self.indexarray.values():
             if type(file) == str:
                 index = self.fileindexarray[file]
-                source = PIL.Image.open(file)
+                resourcelocator = modloader.ResourceLocator.ResourceLocation(file)
+                source = resourcelocator.load_as_image()
             else:
                 source = file[0]
                 index = file[1]

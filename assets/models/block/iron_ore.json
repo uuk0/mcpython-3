@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:iron_ore",
+  "files": ["assets/textures/block/iron_ore.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

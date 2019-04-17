@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:polished_granite_slab",
+  "files": ["assets/textures/block/polished_granite.png"],
+  "entrys": [
+    {
+      "name": "slab",
+      "side": 0, "top": 0
+    }
+  ]
+}

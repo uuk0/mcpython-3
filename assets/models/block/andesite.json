@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:andesite",
+  "files": ["assets/textures/block/andesite.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

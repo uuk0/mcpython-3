@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:nether_bricks",
+  "files": ["assets/textures/block/nether_bricks.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

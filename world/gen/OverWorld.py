@@ -2,6 +2,8 @@ import world.gen.IWorldGenerator
 import globals as G
 import util.noise, util.vector
 import random
+import world.gen.CaveGenerator
+import util.progressbar
 
 BIOME_SIZE = 4
 DEFAULT_LEVEL = 20
@@ -150,19 +152,30 @@ class OverWorld(world.gen.IWorldGenerator.IWorldGenerator):
         self.chunk_steps[(cx, cz)] = 7
         for x in range(cx * 16, cx * 16 + 16):
             for z in range(cz * 16, cz * 16 + 16):
-                biome = self.smooth_biomemap[(x, z)] if (x, z) in self.smooth_biomemap else self.biomemap[(x, z)]
-                if len(biome.getStructures()) > 0:
-                    weight = round(util.noise.noise(x, -200, z, 89) * biome.getStructurWeight())
-                    if weight == round(biome.getStructurWeight() / 2):
-                        if not biome.STRUCTURETABLE:
-                            for structure in biome.getStructures().keys():
-                                biome.STRUCTURETABLE += [structure] * biome.getStructures()[structure]
-                        key = round(util.noise.noise(x, x*z, z, x**abs(z))*len(biome.STRUCTURETABLE)) + 1
-                        if key >= len(biome.STRUCTURETABLE): key = key % len(biome.STRUCTURETABLE)
-                        structure = biome.STRUCTURETABLE[key]
-                        if structure.getStructureType() == "surface":
-                            structure.paste(x, self.highmap[(x, z)]+1 if (x, z) not in self.smooth_highmap else
-                                            self.smooth_highmap[(x, z)]+1, z)
+                ibiome = self.smooth_biomemap[(x, z)] if (x, z) in self.smooth_biomemap else self.biomemap[(x, z)]
+                if ibiome.getStructureHeightAmount() < 1:
+                    if random.randint(1, round(1/ibiome.getStructureHeightAmount())) == 1:
+                        self.paste_structures(ibiome, x, z)
+                else:
+                    for _ in range(ibiome.getStructureHeightAmount()):
+                        self.paste_structures(ibiome, x, z)
+
+    def paste_structures(self, ibiome, x, z):
+        structures = ibiome.getStructures()
+        random.shuffle(structures)
+        # print(structures)
+        for istructure in structures:
+            if random.randint(1, round(1/istructure.getStructureGenerationChance())) == 1:
+                if istructure.getStructureType() == "surface":
+                    y = self.smooth_highmap[(x, z)] + 1
+                    if istructure.is_valid(x, y, z, y-1):
+                        istructure.paste(x, y, z)
+                        break
+                elif istructure.getStructureType() == "height":
+                    y = random.randint(istructure.get_min(), istructure.get_max())
+                    if istructure.is_valid(x, y, z, self.smooth_highmap[(x, z)]):
+                        istructure.paste(x, y, z)
+                        break
 
     def generate_chunk(self, cx, cz):
         # missing: biome map, temperature map
@@ -172,6 +185,7 @@ class OverWorld(world.gen.IWorldGenerator.IWorldGenerator):
         self.smooth_high_map(cx, cz)
         self.generate_bedrock_layer(cx, cz)
         self.generate_stone_layer(cx, cz)
+        world.gen.CaveGenerator.generate_chunk(cx, cz)
         self.generate_structure(cx, cz)
 
     def generate_area(self, start, end):
@@ -192,10 +206,23 @@ class OverWorld(world.gen.IWorldGenerator.IWorldGenerator):
             for cz in range(start[1], end[1]+1):
                 self.smooth_high_map(cx, cz)
         print(" -placing blocks")
+        size = abs(start[0] - end[0]) * abs(start[1] - end[1])
+        util.progressbar.print_progress_bar(0, size, prefix='Progress:', suffix='Complete', length=size)
         for cx in range(start[0], end[0]+1):
             for cz in range(start[1], end[1]+1):
-                print(cx, cz)
+                util.progressbar.print_progress_bar(cx * 16 + cz, size, prefix='Progress:', suffix='Complete',
+                                                    length=size)
+                # print(cx, cz)
                 self.generate_bedrock_layer(cx, cz)
                 self.generate_stone_layer(cx, cz)
+        print("\n -generating caves")
+        for cx in range(start[0], end[0] + 1):
+            for cz in range(start[1], end[1] + 1):
+                print(cx, cz)
+                world.gen.CaveGenerator.generate_chunk(cx, cz)
+        print(" -placing structures")
+        for cx in range(start[0], end[0] + 1):
+            for cz in range(start[1], end[1] + 1):
+                print(cx, cz)
                 self.generate_structure(cx, cz)
 

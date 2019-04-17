@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:end_stone",
+  "files": ["assets/textures/block/end_stone.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

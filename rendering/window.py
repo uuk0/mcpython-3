@@ -9,6 +9,8 @@ from pyglet.window import key, mouse
 
 import gui.ItemStack
 
+import gui.TextDraw
+
 
 class Window(pyglet.window.Window):
 
@@ -282,7 +284,7 @@ class Window(pyglet.window.Window):
             return
         if self.exclusive:
             vector = self.get_sight_vector()
-            block, previous = self.model.hit_test(self.position, vector)
+            block, previous, phit = self.model.hit_test(self.position, vector, exact_hit=True)
             iblock = self.model.world[block] if block in self.model.world else None
             if iblock and iblock.can_interact_with(
                     G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[G.player.selectedinventoryslot].get_stack(),
@@ -300,18 +302,23 @@ class Window(pyglet.window.Window):
                     slot = G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[G.player.selectedinventoryslot]
                     if slot.stack.item:
                         if slot.stack.item.has_block():
-                            self.model.add_block(previous, slot.stack.item.getBlockName())
-                        slot.stack.amount -= 1
+                            self.model.add_block(previous, slot.stack.item.getBlockName(), previous=block,
+                                                 hitposition=phit)
+                            if G.player.gamemode == 0:
+                                slot.stack.amount -= 1
                     elif slot.stack.itemname:
-                        self.model.add_block(previous, slot.stack.itemname)
-                        slot.stack.amount -= 1
+                        self.model.add_block(previous, slot.stack.itemname, previous=block, hitposition=phit)
+                        if G.player.gamemode == 0:
+                            slot.stack.amount -= 1
             elif button == pyglet.window.mouse.LEFT and block:
                 block = self.model.world[block]
                 if G.player.gamemode != 3:
                     if G.player.gamemode != 1:
                         if block.isBrakeAble() and G.player.gamemode == 0:
                             self.model.remove_block(block.position)
-                            drop = iblock.get_drop()
+                            drop = iblock.get_drop(
+                                G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[
+                                    G.player.selectedinventoryslot].get_stack())
                             for itemname in drop.keys():
                                 G.player.add_to_free_place(itemname, drop[itemname])
                     else:
@@ -506,11 +513,12 @@ class Window(pyglet.window.Window):
         pyglet.gl.glDisable(pyglet.gl.GL_BLEND)
         if G.inventoryhandler.should_game_freeze():
             G.inventoryhandler.send_event("draw_3d_end")
-        self.draw_focused_block()
+        if G.player.gamemode != 3:
+            self.draw_focused_block()
         self.set_2d()
         if G.inventoryhandler.should_game_freeze():
             G.inventoryhandler.send_event("draw_2d_start")
-        if not G.inventoryhandler.should_game_freeze():
+        if not G.inventoryhandler.should_game_freeze() and G.player.gamemode != 3:
             self.draw_reticle()
         self.draw_label()
         G.inventoryhandler.draw()

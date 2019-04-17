@@ -6,12 +6,17 @@ import pyglet
 import os
 import PIL.Image
 import util.vector
+import Block.ILog
+import Block.ISlab
+import traceback
+import modloader.events.LoadStageEvent
 
 
 class ModelHandler:
     def __init__(self):
         self.models = {}
         self.modelindex = {}
+        modloader.events.LoadStageEvent.textureatlas_load("minecraft")(self.generate_atlases)
 
     def add_model(self, file):
         if file in self.models: return self.models[file]
@@ -19,15 +24,24 @@ class ModelHandler:
             try:
                 model = Model(json.load(f))
             except:
-                print(file)
-                raise
+                print("error occured during loading file "+str(file))
+                # traceback.print_exc()
+                return
             self.models[file] = model
             self.modelindex[model.name] = model
         return self.models[file]
 
     def generate(self):
-        for model in self.models.values():
+        m = list(self.models.values())
+        for model in m:
             model.generate()
+
+    def generate_atlases(self, *args):
+        m = list(self.models.values())
+        m.sort(key=lambda model: model.name.split(":")[-1])
+        m.sort(key=lambda model: len(model.files), reverse=True)
+        for model in m:
+            model.create_files()
 
     def show(self, position):
         block = G.model.world[position]
@@ -68,6 +82,9 @@ class IModelEntry:
 
     def is_part_of(self, position):
         return True
+
+    def get_texture_changes(self, start_index):
+        return []
 
 
 class BoxModelEntry(IModelEntry):
@@ -118,6 +135,109 @@ class BoxModelEntry(IModelEntry):
 IModelEntry.ENTRYS[BoxModelEntry.getName()] = BoxModelEntry
 
 
+class LogModelEntry(IModelEntry):
+    @staticmethod
+    def getName():
+        return "log"
+
+    def __init__(self, *args, **kwargs):
+        IModelEntry.__init__(self, *args, **kwargs)
+        self.sub_model = BoxModelEntry({}, self.model)
+        self.indexes = [self.data["front_index"], self.data["side_index"]]
+
+    def show(self, position):
+        self.update_submodel_for(position)
+        self.sub_model.show(position)
+
+    def hide(self, position):
+        self.update_submodel_for(position)
+        self.sub_model.hide(position)
+
+    def update_submodel_for(self, position):
+        block = G.model.world[position]
+        if issubclass(type(block), Block.ILog.ILog):
+            orientation = block.get_rotation()
+            if orientation == "UD":
+                self.sub_model.data = {"name": "cube", "indexes": [self.indexes[0]]*2+[self.indexes[1]]*4}
+            elif orientation == "NS":
+                self.sub_model.data = {"name": "cube", "indexes": [self.indexes[1], self.indexes[2]] +
+                                                                  [self.indexes[0]]*2 + [self.indexes[2]]*2}
+            elif orientation == "OW":
+                self.sub_model.data = {"name": "cube", "indexes": [self.indexes[2], self.indexes[1]] +
+                                                                  [self.indexes[2]]*2 + [self.indexes[0]]*2}
+            else:
+                raise ValueError("rotation "+str(orientation)+" is unknown")
+        else:
+            raise ValueError("position contains block that is not supported")
+
+    def is_part_of(self, position):
+        # self.update_submodel_for(position)
+        return self.sub_model.is_part_of(position)
+
+    def get_texture_changes(self, start_index):
+        self.indexes.append(start_index)
+        return [{"type": "rotate",
+                 "files": [self.indexes[1]],
+                 "arguments": [90]}]
+
+
+IModelEntry.ENTRYS[LogModelEntry.getName()] = LogModelEntry
+
+
+class SlabModelEntry(IModelEntry):
+    @staticmethod
+    def getName():
+        return "slab"
+
+    def __init__(self, *args, **kwargs):
+        IModelEntry.__init__(self, *args, **kwargs)
+        self.sub_model = BoxModelEntry({}, self.model)
+        self.indexes = [self.data["side"], self.data["top"]]
+
+    def show(self, position):
+        self.update_submodel_for(position)
+        self.sub_model.show(position)
+
+    def hide(self, position):
+        self.update_submodel_for(position)
+        self.sub_model.hide(position)
+
+    def update_submodel_for(self, position):
+        block = G.model.world[position]
+        if issubclass(type(block), Block.ISlab.ISlab):
+            mode = block.get_state()
+            if mode == "up":
+                self.sub_model.data = {"name": "cube",
+                                       "indexes": [self.indexes[1]]*2+[self.indexes[2]]*4,
+                                       "box_size": [0.5, 0.25, 0.5],
+                                       "relative_position": [0, 0.25, 0]}
+            elif mode == "down":
+                self.sub_model.data = {"name": "cube",
+                                       "indexes": [self.indexes[1]]*2+[self.indexes[3]]*4,
+                                       "box_size": [0.5, 0.25, 0.5],
+                                       "relative_position": [0, -0.25, 0]}
+            elif mode == "double":
+                self.sub_model.data = {"name": "cube", "indexes": [self.indexes[1]]*2+[self.indexes[0]]*4}
+            else:
+                raise ValueError("unknown state of slab: "+str(mode))
+        else:
+            raise ValueError("position cotains block that is not supported")
+
+    def is_part_of(self, position):
+        # self.update_submodel_for(position)
+        return self.sub_model.is_part_of(position)
+
+    def get_texture_changes(self, start_index):
+        self.indexes += [start_index+1, start_index+3]
+        return [{"type": "crop", "files": self.indexes[0], "arguments": [[[0, 0, 15, 7]]]},
+                {"type": "resize", "files": start_index, "arguments": [[64, 64]]},
+                {"type": "crop", "files": self.indexes[0], "arguments": [[[0, 7, 15, 15]]]},
+                {"type": "resize", "files": start_index+2, "arguments": [[64, 64]]}]
+
+
+IModelEntry.ENTRYS[SlabModelEntry.getName()] = SlabModelEntry
+
+
 class Model:
     def __init__(self, data):
         self.data = data
@@ -131,6 +251,7 @@ class Model:
         for entry in self.data["entrys"]:
             if entry["name"] in IModelEntry.ENTRYS:
                 self.entrys.append(IModelEntry.ENTRYS[entry["name"]](entry, self))
+                self.texturechanges += self.entrys[-1].get_texture_changes(len(self.files) + len(self.texturechanges))
             else:
                 raise ValueError("can't cast model entry data " + str(entry) + " to an model entry")
         for element in self.texturechanges:
@@ -145,13 +266,17 @@ class Model:
                     images.append(PIL.Image.open(self.files[file]) if type(self.files[file]) == str else
                                   self.files[file])
             results = G.texturechangerhandler.generate_textures(images, str(name),
-                                                                *element["arguments"])
+                                                                *element["arguments"] if "arguments" in element else [])
             self.files += results
+
+    def create_files(self):
         self.indexes = G.textureatlashandler.add_images(self.files)
         # print(self.name, self.indexes)
 
 
-for e in os.listdir(G.local+"/assets/models/block"):
-    if os.path.isfile(G.local+"/assets/models/block/"+e):
-        G.modelhandler.add_model(G.local+"/assets/models/block/"+e)
+@modloader.events.LoadStageEvent.model_load("minecraft")
+def load_models(*args):
+    for e in os.listdir(G.local+"/assets/models/block"):
+        if os.path.isfile(G.local+"/assets/models/block/"+e):
+            G.modelhandler.add_model(G.local+"/assets/models/block/"+e)
 

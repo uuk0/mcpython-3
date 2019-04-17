@@ -37,3 +37,7 @@ commandparser = None
 
 craftinghandler = None
 
+itemconstructor = None
+
+modhandler = None
+

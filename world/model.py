@@ -85,7 +85,7 @@ class Model(object):
                         self.add_block((x, y, z), t, immediate=False)
                 s -= d  # decrement side lenth so hills taper off"""
 
-    def hit_test(self, position, vector, max_distance=8):
+    def hit_test(self, position, vector, max_distance=8, exact_hit=False):
         """ Line of sight search from current position. If a block is
         intersected it is returned, along with the block previously in the line
         of sight. If no block is found, return None, None.
@@ -111,7 +111,7 @@ class Model(object):
                 iblock = self.world[key]
                 modelentry = G.modelhandler.modelindex[iblock.get_model_name()].entrys[iblock.get_active_model_index()]
                 if modelentry.is_part_of((x, y, z)):
-                    return key, previous
+                    return (key, previous) if not exact_hit else (key, previous, (x, y, z))
                 """box = modelentry.data["box_size"] if "box_size" in modelentry.data else (0.5, 0.5, 0.5)
                 rpos = modelentry.data["relative_position"] if "relative_position" in modelentry.data else (0, 0, 0)
                 mx, my, mz = key
@@ -126,7 +126,7 @@ class Model(object):
             if previous != key:
                 previous = key
             x, y, z = x + dx / m, y + dy / m, z + dz / m
-        return None, None
+        return (None, None) if not exact_hit else (None, None, None)
 
     def exposed(self, position):
         """ Returns False is given `position` is surrounded on all 6 sides by
@@ -143,7 +143,7 @@ class Model(object):
                         if not G.model.world[npos].is_solid_to(position): return True
         return False
 
-    def add_block(self, position, blockname, immediate=True):
+    def add_block(self, position, blockname, immediate=True, previous=None, hitposition=None, args=[], kwargs={}):
         """ Add a block with the given `texture` and `position` to the world.
 
         Parameters
@@ -158,7 +158,8 @@ class Model(object):
         if position[1] < 0 or position[1] > 255: return
         if position in self.world:
             self.remove_block(position, immediate)
-        block = G.blockhandler.create_block_at(position, blockname)
+        block = G.blockhandler.create_block_at(position, blockname, *args,
+                                               previous=previous, hitposition=hitposition, *kwargs)
         if block:
             self.world[position] = block
             self.sectors.setdefault(util.vector.sectorize(position), []).append(position)
@@ -178,6 +179,7 @@ class Model(object):
             Whether or not to immediately remove block from canvas.
 
         """
+        if position not in self.world: return
         self.world[position].on_delete()
         self.sectors[util.vector.sectorize(position)].remove(position)
         if immediate:
@@ -274,6 +276,12 @@ class Model(object):
         """
         self._shown.pop(position).delete()
         """
+
+    def update_block(self, position):
+        state = position in self.shown
+        if state:
+            self.hide_block(position)
+            self.show_block(position)
 
     def show_sector(self, sector):
         """ Ensure all blocks in the given sector that should be shown are

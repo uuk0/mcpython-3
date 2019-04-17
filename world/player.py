@@ -4,6 +4,7 @@ import texture.BlockItemFactory
 import chat.Chat
 import gui.ItemStack
 import util.vector
+import sys
 
 
 class Player:
@@ -33,8 +34,9 @@ class Player:
                         itemstack.amount = m
         vstack = gui.ItemStack.ItemStack(itemname, amount)
         for slot in slots:
-            if slot.set_stack(vstack):
-                return
+            if not slot.get_stack().itemfile:
+                if slot.set_stack(vstack):
+                    return
         print("can't find an slot that is free")
 
     def set_gamemode(self, gamemode):

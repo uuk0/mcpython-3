@@ -6,6 +6,20 @@ import util.noise
 @G.biomehandler
 class Dessert(world.gen.biome.IBiome.IBiome):
     @staticmethod
+    def getStructureHeightAmount():
+        return 0.2
+
+    @staticmethod
+    def getStructures():  # structure -> weight
+        return [world.gen.structure.OreProvider.COAL_ORE,
+                world.gen.structure.OreProvider.IRON_ORE,
+                world.gen.structure.OreProvider.GOLD_ORE,
+                world.gen.structure.OreProvider.EMERALD_ORE,
+                world.gen.structure.OreProvider.REDSTONE_ORE,
+                world.gen.structure.OreProvider.DIAMOND_ORE,
+                world.gen.structure.OreProvider.LAPIS_ORE]
+
+    @staticmethod
     def getName():
         return "minecraft:dessert"
 

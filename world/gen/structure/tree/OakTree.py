@@ -3,6 +3,9 @@ import world.gen.structure.tree.ITreeStructure
 
 
 class OakTree(world.gen.structure.tree.ITreeStructure.ITreeStructure):
+    def __init__(self, chance):
+        self.chance = chance
+
     @staticmethod
     def getLogBlock():
         return "minecraft:oak_log"
@@ -15,6 +18,9 @@ class OakTree(world.gen.structure.tree.ITreeStructure.ITreeStructure):
     def getLeaveBlock():
         return "minecraft:oak_leaves"
 
+    def getStructureGenerationChance(self) -> int:
+        return self.chance
 
-oaktree = OakTree()
+
+oaktreeplains = OakTree(1/200)
 

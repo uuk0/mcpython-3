@@ -1,6 +1,7 @@
 import globals as G
 import PIL.Image
 import importlib, os
+import modloader.events.LoadStageEvent
 
 
 class ItemHandler:
@@ -24,6 +25,7 @@ class ItemHandler:
             file = obj.getItemFile(None)
             image = PIL.Image.open(file)
             image.resize((32, 32)).save(file)
+        self.itemnames.sort()
 
     def __call__(self, *args, **kwargs):
         self.register(args[0])
@@ -32,7 +34,12 @@ class ItemHandler:
 G.itemhandler = ItemHandler()
 
 
-for file in os.listdir(G.local+"/Item"):
-    if file.startswith("Item") and not file in ["ItemHandler.py"]:
-        importlib.import_module("Item."+str(file.split(".")[0]))
+@modloader.events.LoadStageEvent.items("minecraft")
+def load_items(*args):
+    for file in os.listdir(G.local+"/Item"):
+        if file.startswith("Item") and not file in ["ItemHandler.py"]:
+            importlib.import_module("Item."+str(file.split(".")[0]))
+
+
+import Item.ItemConstructor
 

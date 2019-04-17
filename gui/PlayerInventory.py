@@ -1,22 +1,28 @@
 import globals as G
 import gui.Inventory
-import gui.player.hotbar
 import gui.player.IPlayerInventoryMode
-import gui.player.main
 import gui.Slot
 import pyglet.window.key, pyglet.window.mouse
 import gui.ItemStack
+import modloader.events.LoadStageEvent
 
 
-hotbar = gui.player.hotbar.Hotbar()
-main = gui.player.main.Main(hotbar)
+@modloader.events.LoadStageEvent.playerinventory_load("minecraft")
+def setup_player_inventory(*args):
+    import gui.player.hotbar
+    import gui.player.main
+
+    hotbar = gui.player.hotbar.Hotbar()
+    main = gui.player.main.Main(hotbar)
+
+    PlayerInventory.POSSIBLE_MODES["hotbar"] = hotbar
+    PlayerInventory.POSSIBLE_MODES["inventory"] = main
 
 
 class PlayerInventory(gui.Inventory.Inventory):
     # a name -> None / <Inventory> dict for the states of the inventory
     # todo: add creative_inventory, spectator_inventory, spectator_hotbar, creative tab injection
-    POSSIBLE_MODES = {"hotbar": hotbar,
-                      "inventory": main}
+    POSSIBLE_MODES = {}
 
     def __init__(self, player):
 
@@ -56,6 +62,8 @@ class PlayerInventory(gui.Inventory.Inventory):
             # handle mouse input
             mslot = self.slots[0]
             hslot = self.get_slot(*args[:2])
+            if not hslot:  # test for other interfaces
+                pass
             if args[2] == pyglet.window.mouse.LEFT:
                 if hslot:
                     if mslot.get_stack().is_empty():

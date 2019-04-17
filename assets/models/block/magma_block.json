@@ -1,0 +1,14 @@
+{
+  "name": "minecraft:magma_block",
+  "files": ["assets/textures/block/magma.png"],
+  "changes": [
+    {"type": "crop", "files": [0], "arguments": [[0, 0, 16, 16]]},
+    {"type": "resize", "files": [1], "arguments": [[64, 64]]}
+  ],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [2, 2, 2, 2, 2, 2]
+    }
+  ]
+}

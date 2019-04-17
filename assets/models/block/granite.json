@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:granite",
+  "files": ["assets/textures/block/granite.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

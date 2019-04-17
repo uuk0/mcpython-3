@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:coal_block",
+  "files": ["assets/textures/block/coal_block.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

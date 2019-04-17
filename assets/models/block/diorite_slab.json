@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:diorite_slab",
+  "files": ["assets/textures/block/diorite.png"],
+  "entrys": [
+    {
+      "name": "slab",
+      "side": 0, "top": 0
+    }
+  ]
+}

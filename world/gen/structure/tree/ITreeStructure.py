@@ -4,9 +4,6 @@ import util.noise
 
 
 class ITreeStructure(world.gen.structure.Structure.IStructure):
-    def __init__(self):
-        pass
-
     def paste(self, x, y, z):
         r = self.getHighRange()
         high = round(util.noise.noise(x, -y, z, -10) * (r[1] - r[1]) + r[0])

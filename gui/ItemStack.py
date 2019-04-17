@@ -35,7 +35,12 @@ class ItemStack:
         except:
             pass
         if flag:
-            raise NotImplementedError("ItemStack system not fully implemented")
+            if item_or_name_or_itemfile in G.blockhandler.blocks:
+                self.itemfile = None
+                self.item = None
+                self.itemname = None
+            else:
+                raise NotImplementedError("ItemStack system not fully implemented")
         self.amount = amount
 
     def set_amount(self, amount):

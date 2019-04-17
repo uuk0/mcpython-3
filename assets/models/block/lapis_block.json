@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:lapis_block",
+  "files": ["assets/textures/block/lapis_block.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

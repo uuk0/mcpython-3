@@ -1,0 +1,11 @@
+{
+  "name": "minecraft:quartz_block",
+  "files": ["assets/textures/block/quartz_block_top.png",
+"assets/textures/block/quartz_block_side.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 1, 1, 1, 1]
+    }
+  ]
+}

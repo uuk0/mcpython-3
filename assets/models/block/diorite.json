@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:diorite",
+  "files": ["assets/textures/block/diorite.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

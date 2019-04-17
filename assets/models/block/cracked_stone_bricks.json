@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:cracked_stone_bricks",
+  "files": ["assets/textures/block/cracked_stone_bricks.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

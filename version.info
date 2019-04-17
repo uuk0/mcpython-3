@@ -1,3 +1,41 @@
+19w16:
+    Bug Fixes:
+        in gamemode 1 set an block will remove the block out of your inventory like in gamemode 0
+        adding items to inventory do not work correct
+        hotbar overlay is not drawn correct
+        upper keys do not work in chat
+        focused blocks are drawn in gamemode 3
+
+    Blocks:
+        added slab-system, log-system
+        added Bone Block, Bookshelf, Brick Slab, Cobblestone slab, andesite, andesite slab, chiseled quartz block, chiseled stone bricks
+        added coal block, coal ore, cracked stone bricks, diamond block, diamond ore, diorite, diorite slab, emerald block, emerald ore, end stone
+        added end stone bricks, end stone bricks slab, gold block, gold ore, granite, granite slab, iron block, iron ore, lapis ore, lapis block
+        added mossy stone bricks, mossy stone brick slab, nether bricks, nether brick slab, nether quartz ore, netherrack, polished diorite
+        added polished diorite slab, polished granite, polished granite slab, polished andesite, polished andesite slab, quartz block, quartz pillar
+        added redstone ore, redstone block
+
+    Items:
+        made adding items much more simpler
+        added book, enchanted book, coal, diamond, redstone, quartz, emerald, lapis lazuli8
+
+    Creative Item Handling:
+        adding "Item Pages" which are accessable via "C" and can be wrapped around with "SHIFT+C" & "ALT+C"
+
+    text drawing:
+        added minecraft-like drawing of text
+
+    Chat:
+        added black background
+
+    World Generation:
+        added caves
+        added ores
+
+    Mod Loader:
+        added ability to load mods from folders and zip files
+        everything is now staged into loading phases
+
 
 19w15:
     World Generation:

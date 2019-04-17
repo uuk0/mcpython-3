@@ -37,6 +37,14 @@ for path in os.listdir(G.local+"/tmp"):
 
 # loading own moduls
 
+import modloader.ModHandler
+
+import modloader.events.LoadStageEvent
+
+G.modhandler.search_for_mods()
+
+G.modhandler.post_loading_phase("startup")
+
 import texture.TextureFactory
 import texture.TextureChanger
 import texture.ModelHandler
@@ -46,15 +54,41 @@ import gui.PlayerInventory
 import Block.BlockHandler
 import world.gen.biome.BiomeHandler
 import rendering.window
+import texture.BlockItemFactory
+
+G.modhandler.post_loading_phase("registry:init")
 
 
-# Setup all handlers
+G.modhandler.post_loading_phase("registry:plugins")
 
+
+for stage in G.modhandler.stages.values():
+    stage.close()
+
+# Load registry items
+
+
+G.modhandler.post_loading_phase("registry:on_registration_begin")
+G.modhandler.post_loading_phase("registry:textures:texturechangerentrys")
+G.modhandler.post_loading_phase("registry:textures:texture_preparing")
+G.modhandler.post_loading_phase("registry:models:load")
 print("generating models")
 G.modelhandler.generate()
-
+G.modhandler.post_loading_phase("registry:textures:textureatlas:setup")
 print("generating texture atlases")
 G.textureatlashandler.generate()
+G.modhandler.post_loading_phase("registry:inventory:load")
+G.modhandler.post_loading_phase("registry:inventory:player_subitems")
+G.modhandler.post_loading_phase("registry:item:load")
+G.modhandler.post_loading_phase("registry:block:load")
+G.modhandler.post_loading_phase("registry:biome:load")
+G.biomehandler.generate()
+world.gen.OverWorld.BIOME_SIZE *= len(G.biomehandler.biometable)
+G.modhandler.post_loading_phase("registry:crafting:recipe")
+G.modhandler.post_loading_phase("registry:command")
+
+texture.BlockItemFactory.blockitemfactory.blocktable = G.blockhandler.blockarray[:]
+G.modhandler.post_loading_phase("registry:block_factory_setup")
 
 
 # Starting game

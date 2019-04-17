@@ -1,5 +1,6 @@
 import globals as G
 import world.gen.OverWorld
+import modloader.events.LoadStageEvent
 
 
 class BiomeHandler:
@@ -25,11 +26,7 @@ class BiomeHandler:
 G.biomehandler = BiomeHandler()
 
 
-from . import Ocean, Plains, Dessert
-
-
-G.biomehandler.generate()
-
-
-world.gen.OverWorld.BIOME_SIZE *= len(G.biomehandler.biometable)
+@modloader.events.LoadStageEvent.biomes("minecraft")
+def load_biomes(*args):
+    from . import Ocean, Plains, Dessert
 

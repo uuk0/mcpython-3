@@ -1,0 +1,12 @@
+{
+  "name": "minecraft:quartz_pillar",
+  "files": ["assets/textures/block/quartz_pillar_top.png",
+  "assets/textures/block/quartz_pillar.png"],
+  "entrys": [
+    {
+      "name": "log",
+      "front_index": 0,
+      "side_index": 1
+    }
+  ]
+}

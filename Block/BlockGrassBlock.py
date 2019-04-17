@@ -8,6 +8,6 @@ class Grass(Block.IBlock.IBlock):
     def getName():
         return "minecraft:grass"
 
-    def get_drop(self):
+    def get_drop(self, itemstack):
         return {"minecraft:dirt": 1}
 

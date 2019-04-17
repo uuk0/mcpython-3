@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:cobblestone_slab",
+  "files": ["assets/textures/block/cobblestone.png"],
+  "entrys": [
+    {
+      "name": "slab",
+      "side": 0, "top": 0
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:end_stone_brick_slab",
+  "files": ["assets/textures/block/end_stone_bricks.png"],
+  "entrys": [
+    {
+      "name": "slab",
+      "side": 0, "top": 0
+    }
+  ]
+}

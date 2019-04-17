@@ -6,13 +6,14 @@ import gui.InventoryHandler
 import Item.ItemHandler
 import os
 import Block.BlockHandler
+import sys
 
 os.makedirs(G.local+"/tmp/items")
 
 
 class BlockItemFactory:
     def __init__(self):
-        self.blocktable = G.blockhandler.blockarray[:]
+        self.blocktable = []
         self.closed = False
         self.blockname = None
 
@@ -77,8 +78,9 @@ class DummyInventoryBlockItemFactory(gui.Inventory.Inventory):
     def on_event(self, name, *args, **kwargs):
         if name == "update":
             self.timer += args[0]
-            if self.timer > 1:
+            if self.timer > 0.25:
                 self.timer -= 1
+                # blockitemfactory.close()
                 blockitemfactory.step()
         elif name == "draw_3d_start":
             pyglet.gl.glClearColor(1.0, 1.0, 1.0, 0.0)

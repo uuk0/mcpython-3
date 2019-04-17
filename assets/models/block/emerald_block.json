@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:emerald_block",
+  "files": ["assets/textures/block/emerald_block.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

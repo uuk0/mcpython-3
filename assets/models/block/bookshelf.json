@@ -1,0 +1,11 @@
+{
+  "name": "minecraft:bookshelf",
+  "files": ["assets/textures/block/oak_planks.png",
+"assets/textures/block/bookshelf.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 1, 1, 1, 1]
+    }
+  ]
+}

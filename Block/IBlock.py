@@ -7,8 +7,10 @@ class IBlock:
     basic class for all blocks
     """
 
-    def __init__(self, position):
+    def __init__(self, position, previous=None, hitposition=None):
         self.position = position
+        self.previous = previous
+        self.hitposition = hitposition
         self.on_create()
 
     def on_create(self):
@@ -53,7 +55,7 @@ class IBlock:
         """
         return itemstack, True
 
-    def get_drop(self):
+    def get_drop(self, itemstack):
         """
         :return: an itemname: amount dict that should be given to player
         """

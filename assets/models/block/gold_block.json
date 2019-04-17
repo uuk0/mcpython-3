@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:gold_block",
+  "files": ["assets/textures/block/gold_block.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

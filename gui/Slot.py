@@ -3,8 +3,6 @@ import gui.ItemStack
 import pyglet
 import Item.ItemHandler
 
-missing_texture = pyglet.image.load(G.local+"/tmp/missing_texture.png")
-
 IMAGE_SIZE = (100, 100)
 
 
@@ -17,7 +15,7 @@ class Slot:
         self.__stack = stack_or_item_or_name
         self.label = pyglet.text.Label(text=str(self.stack.amount), color=(0, 0, 0, 255))
         self.label.x, self.label.y = position[0] + IMAGE_SIZE[0], position[1] + IMAGE_SIZE[1]
-        self.sprite = pyglet.sprite.Sprite(missing_texture)
+        self.sprite = pyglet.sprite.Sprite(pyglet.image.load(G.local+"/tmp/missing_texture.png"))
         self.sprite.position = position
         self.position = position
         self.__itemfile = G.local+"/tmp/missing_texture.png"
@@ -93,7 +91,7 @@ class SlotCopy(Slot):
         copyof.add_depend(self)
         self.position = position
         self.master = copyof
-        self.sprite = pyglet.sprite.Sprite(missing_texture)
+        self.sprite = pyglet.sprite.Sprite(pyglet.image.load(G.local+"/tmp/missing_texture.png"))
         self.__itemfile = G.local + "/tmp/missing_texture.png"
         self.label = pyglet.text.Label(text=str(self.master.stack.amount), color=(0, 0, 0, 255))
         self.label.x, self.label.y = position[0] + IMAGE_SIZE[0], position[1] + IMAGE_SIZE[1]

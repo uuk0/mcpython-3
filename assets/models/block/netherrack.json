@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:netherrack",
+  "files": ["assets/textures/block/netherrack.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

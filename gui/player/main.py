@@ -15,30 +15,30 @@ class Main(gui.player.IPlayerInventoryMode.IPlayerInventoryMode):
 
     def create_slots(self):
         x, y = self.position
-        x -= texture.TextureFactory.main.size[0] / 2
-        y -= texture.TextureFactory.main.size[1] / 2 - 70
+        x -= texture.TextureFactory.Info.main_size[0] / 2
+        y -= texture.TextureFactory.Info.main_size[1] / 2 - 70
         slots = []
         for i in range(9):
-            slots.append(gui.Slot.SlotCopy(self.main.slots[i], position=(x + 11 + i * 36, y)))
+            slots.append(gui.Slot.SlotCopy(self.main.slots[i], position=(x + 10 + i * 36, y)))
         y += 44
         for i in range(9):
-            slots.append(gui.Slot.Slot(position=(x + 11 + i * 36, y)))
+            slots.append(gui.Slot.Slot(position=(x + 10 + i * 36, y)))
         y += 36
         for i in range(9):
-            slots.append(gui.Slot.Slot(position=(x + 11 + i * 36, y)))
+            slots.append(gui.Slot.Slot(position=(x + 10 + i * 36, y)))
         y += 36
         for i in range(9):
-            slots.append(gui.Slot.Slot(position=(x + 11 + i * 36, y)))
+            slots.append(gui.Slot.Slot(position=(x + 10 + i * 36, y)))
         # armor slots
-        slots.append(gui.Slot.Slot(position=(x + 11, y + 152), is_valid_item_function=self.valid_head))
-        slots.append(gui.Slot.Slot(position=(x + 11, y + 152 - 36), is_valid_item_function=self.valid_body))
-        slots.append(gui.Slot.Slot(position=(x + 11, y + 152 - 36 * 2), is_valid_item_function=self.valid_leggings))
-        slots.append(gui.Slot.Slot(position=(x + 11, y + 152 - 36 * 3), is_valid_item_function=self.valid_shoes))
+        slots.append(gui.Slot.Slot(position=(x + 10, y + 152), is_valid_item_function=self.valid_head))
+        slots.append(gui.Slot.Slot(position=(x + 10, y + 152 - 36), is_valid_item_function=self.valid_body))
+        slots.append(gui.Slot.Slot(position=(x + 10, y + 152 - 36 * 2), is_valid_item_function=self.valid_leggings))
+        slots.append(gui.Slot.Slot(position=(x + 10, y + 152 - 36 * 3), is_valid_item_function=self.valid_shoes))
         # crafting slots
-        slots.append(gui.Slot.Slot(position=(x + 11 + 5 * 36, y + 186 - 36 * 1.5), update_func=self.crafting_update))
-        slots.append(gui.Slot.Slot(position=(x + 11 + 6 * 36, y + 186 - 36 * 1.5), update_func=self.crafting_update))
-        slots.append(gui.Slot.Slot(position=(x + 11 + 5 * 36, y + 150 - 36 * 1.5), update_func=self.crafting_update))
-        slots.append(gui.Slot.Slot(position=(x + 11 + 6 * 36, y + 150 - 36 * 1.5), update_func=self.crafting_update))
+        slots.append(gui.Slot.Slot(position=(x + 10 + 5 * 36, y + 186 - 36 * 1.5), update_func=self.crafting_update))
+        slots.append(gui.Slot.Slot(position=(x + 10 + 6 * 36, y + 186 - 36 * 1.5), update_func=self.crafting_update))
+        slots.append(gui.Slot.Slot(position=(x + 10 + 5 * 36, y + 150 - 36 * 1.5), update_func=self.crafting_update))
+        slots.append(gui.Slot.Slot(position=(x + 10 + 6 * 36, y + 150 - 36 * 1.5), update_func=self.crafting_update))
         # output
         slots.append(gui.Slot.Slot(position=(x + 13 + 8 * 36, y + 166 - 36 * 1.5), update_func=self.crafting_update,
                                    allow_player_interaction=False))
@@ -61,8 +61,8 @@ class Main(gui.player.IPlayerInventoryMode.IPlayerInventoryMode):
 
     def draw_background(self):
         x, y = self.position
-        x -= texture.TextureFactory.hotbar.size[0] / 2
-        y -= texture.TextureFactory.hotbar.size[1] / 2 + 90
+        x -= texture.TextureFactory.Info.hotbar_size[0] / 2
+        y -= texture.TextureFactory.Info.hotbar_size[1] / 2 + 90
         self.bgsprite.position = (x, y)
         self.bgsprite.draw()
 

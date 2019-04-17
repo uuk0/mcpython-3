@@ -77,10 +77,8 @@ class IBiome:
 
     @staticmethod
     def getStructures():  # structure -> weight
-        return {}
+        return []
 
     @staticmethod
-    def getStructurWeight():
-        """how the chance is to place an structure: 1/n
-        using perlin noise to select the places for"""
-        return 10
+    def getStructureHeightAmount():
+        return 0

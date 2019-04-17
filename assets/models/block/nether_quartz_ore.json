@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:nether_quartz_ore",
+  "files": ["assets/textures/block/nether_quartz_ore.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}
