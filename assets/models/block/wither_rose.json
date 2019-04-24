@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:wither_rose",
+  "files": ["assets/textures/block/wither_rose.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

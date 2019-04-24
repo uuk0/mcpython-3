@@ -1,0 +1,4 @@
+seed * 100: LandMassInfo
+seed * 100 + 1: TemperatureMapInfo
+seed * 100 + 2: BiomeMapInfo
+seed * 100 + 3: GenerationHighInfo - base noise

@@ -3,7 +3,7 @@ import globals as G
 
 class IItem:
     def __init__(self):
-        pass
+        self.enchantments = []
 
     @staticmethod
     def getName():
@@ -20,4 +20,10 @@ class IItem:
 
     @staticmethod
     def has_block():
+        return True
+
+    def enchant(self, enchantment):
+        self.enchantments.append(enchantment)
+
+    def is_enchantable_with(self, enchantment):
         return True

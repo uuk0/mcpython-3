@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:grass_small",
+  "files": ["tmp/blocks/grass_small.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

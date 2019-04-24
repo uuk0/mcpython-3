@@ -1,0 +1,15 @@
+{
+  "name": "minecraft:lilac",
+  "files": ["assets/textures/block/lilac_top.png",
+"assets/textures/block/lilac_bottom.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    },
+    {
+      "name": "cross",
+      "face": 1
+    }
+  ]
+}

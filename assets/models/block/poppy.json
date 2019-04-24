@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:poppy",
+  "files": ["assets/textures/block/poppy.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

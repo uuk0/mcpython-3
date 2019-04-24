@@ -1,0 +1,15 @@
+{
+  "name": "minecraft:peony",
+  "files": ["assets/textures/block/peony_top.png",
+"assets/textures/block/peony_bottom.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    },
+    {
+      "name": "cross",
+      "face": 1
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "modloactions": [
+    "modhelper.main",
+    "modhelper.plugin.PluginAPIModBuffer"
+  ]
+}

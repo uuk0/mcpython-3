@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:azure_bluet",
+  "files": ["assets/textures/block/azure_bluet.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

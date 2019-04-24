@@ -10,8 +10,7 @@ player = None
 
 
 CONFIG = {}
-
-model = None
+worldaccess = None
 
 window = None
 

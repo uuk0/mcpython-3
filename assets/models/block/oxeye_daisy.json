@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:oxeye_daisy",
+  "files": ["assets/textures/block/oxeye_daisy.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

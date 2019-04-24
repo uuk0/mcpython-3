@@ -7,6 +7,7 @@ import Item.ItemHandler
 import os
 import Block.BlockHandler
 import sys
+import world.WorldAccess
 
 os.makedirs(G.local+"/tmp/items")
 
@@ -14,8 +15,10 @@ os.makedirs(G.local+"/tmp/items")
 class BlockItemFactory:
     def __init__(self):
         self.blocktable = []
+        self.maxlenght = None
         self.closed = False
         self.blockname = None
+        self.chunkaccess = None
 
     def step(self):
         if self.closed: return
@@ -30,13 +33,17 @@ class BlockItemFactory:
         if len(self.blocktable) == 0:
             self.close()
             return
+        G.window.set_caption('Mcpython build ' + str(G.CONFIG["BUILD"]) + " | building blocks | " +
+                             str(self.maxlenght - len(self.blocktable) + 1) + " / " + str(self.maxlenght))
+        self.chunkaccess = G.worldaccess.get_active_dimension_access().get_chunk_for((0, 0), generate=False)
         block = self.blocktable.pop(0)
         name = block.getName()
-        G.model.add_block((0, 0, 0), name)
-        mname = G.model.world[(0, 0, 0)].get_model_name()
+        self.chunkaccess.add_block((0, 0, 0), name)
+        mname = self.chunkaccess.world[(0, 0, 0)].get_model_name()
         if mname in G.modelhandler.modelindex:
             model = G.modelhandler.modelindex[mname]
-            modelentry = model.entrys[G.model.world[(0, 0, 0)].get_active_model_index()]
+            # (model.name, self.chunkaccess.world[(0, 0, 0)].getName(), model.entrys, model.data)
+            modelentry = model.entrys[self.chunkaccess.world[(0, 0, 0)].get_active_model_index()]
             box = modelentry.data["box_size"] if "box_size" in modelentry.data else (0.5, 0.5, 0.5)
             G.window.positon = (1, 1.25+(box[1]*2-1), 1)
         else:
@@ -44,18 +51,24 @@ class BlockItemFactory:
         self.blockname = name
 
     def close(self):
+        self.chunkaccess = G.worldaccess.get_active_dimension_access().get_chunk_for((0, 0), generate=False)
         self.closed = True
-        G.model.remove_block((0, 0, 0))
+        self.chunkaccess.remove_block((0, 0, 0))
 
     def close_M(self):
+        G.window.set_caption('Mcpython build '+str(G.CONFIG["BUILD"])+" | world generation")
         G.inventoryhandler.hide_inventory(dummyinventoryblockitemfactory)
-        G.model.initialize()
+        G.worldaccess.get_active_dimension_access().worldgenerationprovider.generate_chunks_in((-1, -1), (1, 1))
+        G.worldaccess.change_sectors(G.window.sector, None)
+        G.worldaccess.change_sectors(None, G.window.sector)
         G.inventoryhandler.show_inventory(G.player.playerinventory)
         G.player.playerinventory.set_mode("hotbar")
-        G.window.position = (0, G.model.worldgenerator.smooth_highmap[(0, 0)]+2, 0)
+        G.window.position = (0, G.worldaccess.get_active_dimension_access().worldgenerationprovider.highmap[(0, 0)
+                                    ][-1][1]+2, 0)
         G.window.rotation = (0, 0)
         pyglet.gl.glClearColor(0.5, 0.69, 1.0, 1)
         G.window.set_exclusive_mouse(True)
+        G.window.set_caption('Mcpython build '+str(G.CONFIG["BUILD"]))
 
 
 blockitemfactory = BlockItemFactory()

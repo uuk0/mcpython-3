@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:blue_orchid",
+  "files": ["assets/textures/block/blue_orchid.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

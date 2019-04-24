@@ -1,4 +1,5 @@
 import globals as G
+import modloader.events.LoadStageEvent
 
 
 class CommandHandler:
@@ -17,5 +18,13 @@ class CommandHandler:
 G.commandhandler = CommandHandler()
 
 
-from . import (CommandGive, CommandClear, CommandGamemode)
+@modloader.events.LoadStageEvent.commands("minecraft")
+def load_commands(eventname):
+    from . import (CommandGive, CommandClear, CommandGamemode, CommandReload, CommandGenerate, CommandHelp)
+
+
+@modloader.events.LoadStageEvent.load_finished("minecraft")
+def load_startup(eventname):
+    import chat.command.CommandHelp
+    chat.command.CommandHelp.load_startup()
 

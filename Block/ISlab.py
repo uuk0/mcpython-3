@@ -17,9 +17,8 @@ class ISlab(Block.IBlock.IBlock):
         # possible: "up", "down", "double"
         return "down" if not self.mode else self.mode
 
-    def is_solid_to(self, position):
-        dy = self.position[1] - position[1]
-        return (dy < 0 and self.mode == "up") or (dy > 0 and self.mode == "down")
+    def is_solid(self):
+        return False
 
     def can_interact_with(self, itemstack, mousekey=None, mousemod=None):
         return False

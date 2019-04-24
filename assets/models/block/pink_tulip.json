@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:pink_tulip",
+  "files": ["assets/textures/block/pink_tulip.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

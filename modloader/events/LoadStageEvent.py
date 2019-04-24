@@ -23,10 +23,20 @@ crafting_recipes = modloader.events.ILoadStageEvent.ILoadStageEvent("registry:cr
 commands = modloader.events.ILoadStageEvent.ILoadStageEvent("registry:command")
 blockitemfactory = modloader.events.ILoadStageEvent.ILoadStageEvent("registry:block_factory_setup")
 
+# runtime phases
+
+worldgen_prepare = modloader.events.ILoadStageEvent.ILoadStageEvent("worldgen:prepare")
+worldgen_start = modloader.events.ILoadStageEvent.ILoadStageEvent("worldgen:start")
+worldgen_end = modloader.events.ILoadStageEvent.ILoadStageEvent("worldgen:end")
+
+
+load_finished = modloader.events.ILoadStageEvent.ILoadStageEvent("load:finished")
+
 
 stages = [startup, registryinit, registryplugins,
           registry_startup, texture_setup, texture_changer, model_load, textureatlas_load, inventory_load,
-          playerinventory_load, items, blocks, biomes, crafting_recipes, commands, blockitemfactory]
+          playerinventory_load, items, blocks, biomes, crafting_recipes, commands, blockitemfactory,
+          worldgen_prepare, worldgen_start, worldgen_end, load_finished]
 
 
 for stage in stages:

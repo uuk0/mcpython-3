@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:sugar_cane",
+  "files": ["assets/textures/block/sugar_cane.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

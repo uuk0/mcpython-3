@@ -68,4 +68,9 @@ class Main(gui.player.IPlayerInventoryMode.IPlayerInventoryMode):
 
     def on_close(self):
         G.inventoryhandler.show_inventory(G.player.playerinventory.POSSIBLE_MODES["hotbar"])
+        for slot in self.slots[-5:-2]:
+            if slot.get_stack():
+                itemstack = slot.get_stack()
+                G.player.add_to_free_place(itemstack.itemname, itemstack.amount)
+                slot.set_stack(itemstack.empty())
 

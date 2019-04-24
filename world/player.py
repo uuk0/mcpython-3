@@ -1,20 +1,40 @@
 import globals as G
 import gui.PlayerInventory
 import texture.BlockItemFactory
+import chat.command.CommandParser
+import chat.command.CommandHandler
 import chat.Chat
 import gui.ItemStack
-import util.vector
-import sys
 
 
 class Player:
     def __init__(self):
-        self.chat = chat.Chat.Chat()
         G.player = self
+        G.worldaccess.create_dimension_from_id(0)  # Overworld
+        self.dimension = 0
+        self.gamemode = 0
         self.playerinventory = gui.PlayerInventory.PlayerInventory(self)
         G.inventoryhandler.show_inventory(texture.BlockItemFactory.dummyinventoryblockitemfactory)
         self.selectedinventoryslot = 0
-        self.gamemode = 0
+        self.chat = chat.Chat.Chat()
+
+    def kill(self):
+        G.commandparser.parse_command("/clear")
+        G.window.position = (0, G.worldaccess.get_active_dimension_access().\
+                             worldgenerationprovider.highmap[(0, 0)][-1][1]+2, 0)
+
+    def set_gamemode(self, gamemode):
+        if gamemode == self.gamemode: return
+        if gamemode in [0, 2]:
+            G.window.flying = False
+        elif gamemode == 3:
+            G.window.flying = True
+        self.gamemode = gamemode
+
+    def add_block_drop_to_inventory(self, iblock):
+        drops = iblock.get_drop(gui.ItemStack.ItemStack.empty())
+        for element in drops.keys():
+            self.add_to_free_place(element, drops[element])
 
     def add_to_free_place(self, itemname, amount=1):
         slots = G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots + \
@@ -38,15 +58,4 @@ class Player:
                 if slot.set_stack(vstack):
                     return
         print("can't find an slot that is free")
-
-    def set_gamemode(self, gamemode):
-        if gamemode == self.gamemode: return
-        if gamemode in [0, 2]:
-            G.window.flying = False
-        elif gamemode == 3:
-            G.window.flying = True
-        self.gamemode = gamemode
-
-    def kill(self):
-        G.commandparser.parse_command("/clear")
 

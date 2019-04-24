@@ -1,7 +1,7 @@
 import pyglet
 import globals as G
 import math
-import world.model
+import world.WorldAccess
 import util.vector, util.vertices
 import texture.BlockItemFactory
 
@@ -70,7 +70,7 @@ class Window(pyglet.window.Window):
             key._6, key._7, key._8, key._9]
 
         # Instance of the model that handles the world.
-        self.model = world.model.Model()
+        self.worldaccess = world.WorldAccess.WorldAccess(seed=G.CONFIG["seed"])
 
         self.counter = 0
 
@@ -157,14 +157,15 @@ class Window(pyglet.window.Window):
             The change in time since the last call.
 
         """
-        self.model.process_queue()
+        # todo: need we these line?
+        # self.model.process_queue()
         if self.on_ground:
             self.time_since_on_ground += 1
         sector = util.vector.sectorize(self.position)
         if sector != self.sector:
-            self.model.change_sectors(self.sector, sector)
-            if self.sector is None:
-                self.model.process_entire_queue()
+            self.worldaccess.change_sectors(self.sector, sector)
+            # if self.sector is None:
+            #     self.model.process_entire_queue()
             self.sector = sector
         m = 8
         dt = min(dt, 0.2)
@@ -246,7 +247,11 @@ class Window(pyglet.window.Window):
                     op = list(np)
                     op[1] -= dy
                     op[i] += face[i]
-                    if tuple(op) not in self.model.world:
+                    chunk = util.vector.sectorize(op)
+                    chunkaccess = G.worldaccess.get_active_dimension_access().get_chunk_for(chunk, generate=False,
+                                                                                            create=False)
+                    if chunkaccess and (tuple(op) not in chunkaccess.world or
+                                        chunkaccess.world[tuple(op)].can_player_walk_through()):
                         if face == (0, -1, 0):
                             self.on_ground = False
                             self.time_since_on_ground = 0
@@ -284,8 +289,8 @@ class Window(pyglet.window.Window):
             return
         if self.exclusive:
             vector = self.get_sight_vector()
-            block, previous, phit = self.model.hit_test(self.position, vector, exact_hit=True)
-            iblock = self.model.world[block] if block in self.model.world else None
+            block, previous, phit = G.worldaccess.hit_test(self.position, vector, exact_hit=True)
+            iblock = G.worldaccess.get_block(block) if block else None
             if iblock and iblock.can_interact_with(
                     G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[G.player.selectedinventoryslot].get_stack(),
                     button, modifiers):
@@ -302,29 +307,33 @@ class Window(pyglet.window.Window):
                     slot = G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[G.player.selectedinventoryslot]
                     if slot.stack.item:
                         if slot.stack.item.has_block():
-                            self.model.add_block(previous, slot.stack.item.getBlockName(), previous=block,
-                                                 hitposition=phit)
+                            self.worldaccess.add_block(0, previous, slot.stack.item.getBlockName(),
+                                                       arguments=[[], {"previous": block, "hitposition": phit}])
                             if G.player.gamemode == 0:
                                 slot.stack.amount -= 1
                     elif slot.stack.itemname:
-                        self.model.add_block(previous, slot.stack.itemname, previous=block, hitposition=phit)
-                        if G.player.gamemode == 0:
-                            slot.stack.amount -= 1
+                        try:
+                            self.worldaccess.add_block(0, previous, slot.stack.itemname,
+                                                       arguments=[[], {"previous": block, "hitposition": phit}])
+                            if G.player.gamemode == 0:
+                                slot.stack.amount -= 1
+                        except ValueError:
+                            pass
             elif button == pyglet.window.mouse.LEFT and block:
-                block = self.model.world[block]
+                block = G.worldaccess.get_block(block)
                 if G.player.gamemode != 3:
                     if G.player.gamemode != 1:
                         if block.isBrakeAble() and G.player.gamemode == 0:
-                            self.model.remove_block(block.position)
+                            G.worldaccess.remove_block(0, block.position)
                             drop = iblock.get_drop(
                                 G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[
                                     G.player.selectedinventoryslot].get_stack())
                             for itemname in drop.keys():
                                 G.player.add_to_free_place(itemname, drop[itemname])
                     else:
-                        self.model.remove_block(block.position)
+                        self.worldaccess.remove_block(0, block.position)
             elif button == pyglet.window.mouse.MIDDLE and block and G.player.gamemode == 1:
-                block = self.model.world[block]
+                block = G.worldaccess.get_block(block)
                 slot = G.player.playerinventory.POSSIBLE_MODES["hotbar"].slots[G.player.selectedinventoryslot]
                 slot.stack.set_item(block.getName())
         else:
@@ -504,10 +513,10 @@ class Window(pyglet.window.Window):
         pyglet.gl.glColor3d(1, 1, 1)
         if G.inventoryhandler.should_game_freeze():
             G.inventoryhandler.send_event("draw_3d_start")
-        self.model.batch.draw()
+        self.worldaccess.draw_normal()
         pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
         pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
-        self.model.alpha_batch.draw()
+        self.worldaccess.draw_alpha()
         if G.inventoryhandler.should_game_freeze():
             G.inventoryhandler.send_event("draw_3d_alpha")
         pyglet.gl.glDisable(pyglet.gl.GL_BLEND)
@@ -518,6 +527,7 @@ class Window(pyglet.window.Window):
         self.set_2d()
         if G.inventoryhandler.should_game_freeze():
             G.inventoryhandler.send_event("draw_2d_start")
+        self.worldaccess.draw_particle()
         if not G.inventoryhandler.should_game_freeze() and G.player.gamemode != 3:
             self.draw_reticle()
         self.draw_label()
@@ -532,10 +542,10 @@ class Window(pyglet.window.Window):
         """
         if G.inventoryhandler.should_game_freeze(): return
         vector = self.get_sight_vector()
-        block = self.model.hit_test(self.position, vector)[0]
+        block = G.worldaccess.hit_test(self.position, vector)[0]
         if block:
             x, y, z = block
-            iblock = self.model.world[block]
+            iblock = G.worldaccess.get_block(block)
             modelentry = G.modelhandler.modelindex[iblock.get_model_name()].entrys[iblock.get_active_model_index()]
             box = modelentry.data["box_size"] if "box_size" in modelentry.data else (0.5, 0.5, 0.5)
             rx, ry, rz = tuple(modelentry.data["relative_position"]) if "relative_position" in \
@@ -551,12 +561,13 @@ class Window(pyglet.window.Window):
 
         """
         x, y, z = self.position
-        self.label.text = '%02d (%.2f, %.2f, %.2f) %d / %d' % (
-            pyglet.clock.get_fps(), x, y, z,
-            len(self.model._shown), len(self.model.world))
+        self.label.text = '%02d (%.2f, %.2f, %.2f)' % (
+            pyglet.clock.get_fps(), x, y, z)
         sx, sy, sz = util.vector.normalize(self.position)
-        if (sx, sz) in self.model.worldgenerator.biomemap:
-            self.label.text += ", biome: "+str(self.model.worldgenerator.biomemap[(sx, sz)].getName())
+        # todo: reactivate binding
+        if (sx, sz) in self.worldaccess.get_active_dimension_access().worldgenerationprovider.biomemap.map:
+            self.label.text += ", biome: "+str(
+                self.worldaccess.get_active_dimension_access().worldgenerationprovider.biomemap[(sx, sz)].getName())
         self.label.draw()
 
     def draw_reticle(self):

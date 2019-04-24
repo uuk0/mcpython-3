@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:lily_of_the_valley",
+  "files": ["assets/textures/block/lily_of_the_valley.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

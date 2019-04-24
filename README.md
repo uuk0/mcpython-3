@@ -6,7 +6,7 @@ http://www.youtube.com/watch?v=kC3lwK631X8
 
 **Like this project?**
 
-You might also like my other Minecraft clone written in C using modern OpenGL (GL shader language). It performs better, has better terrain generation and saves state to a sqlite database. See here:
+You might also like [foglemen's] other Minecraft clone written in C using modern OpenGL (GL shader language). It performs better, has better terrain generation and saves state to a sqlite database. See here:
 
 https://github.com/fogleman/Craft
 
@@ -39,9 +39,9 @@ The API could contain functionality for the following:
 
 ```shell
 pip install pyglet
-git clone https://github.com/fogleman/Minecraft.git
-cd Minecraft
-python main.py
+git clone https://github.com/uuk0/mcpython-3/tree/test
+cd mcpython-3
+python __main__.py
 ```
 
 ### Mac
@@ -49,7 +49,7 @@ python main.py
 On Mac OS X, you may have an issue with running Pyglet in 64-bit mode. Try running Python in 32-bit mode first:
 
 ```shell
-arch -i386 python main.py
+arch -i386 python __main__.py
 ```
 
 If that doesn't work, set Python to run in 32-bit mode by default:
@@ -90,17 +90,16 @@ See the [wiki](https://github.com/fogleman/Minecraft/wiki) for this project to i
 - D: strafe right
 - Mouse: look around
 - Space: jump
-- Tab: toggle flying mode
+- Tab: toggle flying mode (only arrival in gamemode 1)
+- E: open inventory (no, this is an known bug that when you close the inventory, hotbar gets visable and will show up when you have redone opening and closing)
+- T: open chat, see /help for a list of all registrated commands
 
 ### Building
 
-- Selecting type of block to create:
-    - 1: brick
-    - 2: grass
-    - 3: sand
+- Selecting type of block to create by giving them via /give @s [block_or_item_name]
 - Mouse left-click: remove block
 - Mouse right-click: create block
 
 ### Quitting
 
-- ESC: release mouse, then close window
+- ESC: release mouse, then close window or let game crash :-)

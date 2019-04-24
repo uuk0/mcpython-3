@@ -3,7 +3,7 @@ import os
 import sys
 import globals as G
 
-EXCLUDE = ["builds", "tmp", "__pycache__", ".idea"]
+EXCLUDE = ["builds", "tmp", "__pycache__", ".idea", "mods"]
 
 
 def build():

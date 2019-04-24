@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:white_tulip",
+  "files": ["assets/textures/block/white_tulip.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

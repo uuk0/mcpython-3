@@ -1,0 +1,15 @@
+{
+  "name": "minecraft:tall_grass",
+  "files": ["tmp/blocks/tall_grass_top.png",
+"tmp/blocks/tall_grass_bottom.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    },
+    {
+      "name": "cross",
+      "face": 1
+    }
+  ]
+}

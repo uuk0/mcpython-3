@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:dead_bush",
+  "files": ["assets/textures/block/dead_bush.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

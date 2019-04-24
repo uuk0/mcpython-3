@@ -52,9 +52,9 @@ import texture.TextureAtlas
 import gui.InventoryHandler
 import gui.PlayerInventory
 import Block.BlockHandler
-import world.gen.biome.BiomeHandler
 import rendering.window
 import texture.BlockItemFactory
+import world.gen.biome.BiomeHandler
 
 G.modhandler.post_loading_phase("registry:init")
 
@@ -82,13 +82,21 @@ G.modhandler.post_loading_phase("registry:inventory:player_subitems")
 G.modhandler.post_loading_phase("registry:item:load")
 G.modhandler.post_loading_phase("registry:block:load")
 G.modhandler.post_loading_phase("registry:biome:load")
-G.biomehandler.generate()
-world.gen.OverWorld.BIOME_SIZE *= len(G.biomehandler.biometable)
+# todo: implement here our new biome system!!!
+# G.biomehandler.generate()
+# world.gen.OverWorld.BIOME_SIZE *= len(G.biomehandler.biometable)
 G.modhandler.post_loading_phase("registry:crafting:recipe")
 G.modhandler.post_loading_phase("registry:command")
 
 texture.BlockItemFactory.blockitemfactory.blocktable = G.blockhandler.blockarray[:]
+for element in texture.BlockItemFactory.blockitemfactory.blocktable[:]:
+    if not element.build_item():
+        texture.BlockItemFactory.blockitemfactory.blocktable.remove(element)
+texture.BlockItemFactory.blockitemfactory.maxlenght = len(texture.BlockItemFactory.blockitemfactory.blocktable)
 G.modhandler.post_loading_phase("registry:block_factory_setup")
+
+
+G.modhandler.post_loading_phase("load:finished")
 
 
 # Starting game

@@ -1,3 +1,54 @@
+19w17:
+    Fixed bugs:
+        some things are done outside their phases
+        imageatlas is generating only one all the time instead more when more than 256 textures are registrated
+
+    Enchantments:
+        added basic system
+
+    Items:
+        added enchantment system to enchanted book
+        added all tools 
+
+    World Generation:
+        rewritten from ground:
+            based on landmass, temperature
+            high map is now more "random"
+            biome can now have "mutated" variants
+            flowers, dead bushes & trees will generate in the biomes (plains, dessert & ocean)
+    
+    World Storage:
+        rewritten system holding the world & image data from ground
+
+    Blocks:
+        moved some variables from the old world storage system to Block-specific data
+
+    Windowing:
+        caption of window contains now some more informations about what's happening at the moment
+
+    Commands:
+        added /reload, /generate & /help command
+
+    Blocks:
+        added ability to add "cross" blocks
+        added Base classes for plants & double plants
+        added flowers, sugar cane, dead bush, grass, tall grass
+        added option for not generating an item for an block
+        made it possible to walk trough cerin blocks
+ 
+    Items:
+        added items to flowers
+        added seeds (droped from grass & tall grass)
+
+23th of April, 2019 (build 68)
+    added big oak tree
+    added items for flowers, grass & sugar cane
+    added dessert biome
+    added dead_bush
+    added sugar cane generator
+    fixed bug: BiomeHandler()(biome, ...) do NOT return biome
+    added dessert hills biome
+
 19w16:
     Bug Fixes:
         in gamemode 1 set an block will remove the block out of your inventory like in gamemode 0
@@ -136,4 +187,4 @@
 
     Items:
          added Registry for items
-         added System for generating items onto startup
+added System for generating items onto startup

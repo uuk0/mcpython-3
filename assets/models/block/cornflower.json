@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:cornflower",
+  "files": ["assets/textures/block/cornflower.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

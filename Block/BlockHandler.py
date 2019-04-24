@@ -18,9 +18,6 @@ class BlockHandler:
     def register(self, klass):
         self(klass)
 
-    def create_block_at(self, position, name, *args, **kwargs):
-        return None if name not in self.blocks else self.blocks[name](position, *args, **kwargs)
-
 
 G.blockhandler = BlockHandler()
 

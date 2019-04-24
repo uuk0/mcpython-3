@@ -15,6 +15,7 @@ class LocationConfig:
 class ResourceLocation:
     def __init__(self, location):
         self.location = location
+        self.is_ziped = False
         if os.path.exists(location):
             self.path = location
             self.is_ziped = False
@@ -31,7 +32,7 @@ class ResourceLocation:
                 if zipfile.is_zipfile(path):
                     self.is_ziped = False
                 else:
-                    self.is_ziped = True
+                    self.is_ziped = False  # True
 
                 for spre in LocationConfig.Format1.LTYPEPREFIXES:
                     for fending in LocationConfig.FILEENDINGS:
@@ -50,7 +51,19 @@ class ResourceLocation:
 
                 self.path = path + "/" + self.sub_location
             else:
-                raise ValueError("unknown format "+str(location))
+                flag = False
+                # print(G.modhandler.mods, [imod.PATH for imod in G.modhandler.mods.values()])
+                for imod in G.modhandler.mods.values():
+                    path = imod.PATH + "/" + location
+                    if os.path.exists(path) and not flag:
+                        self.path = imod.PATH + "/" + location
+                        flag = True
+                if os.path.exists(G.local + "/" + location) and not flag:
+                    self.path = G.local + "/" + location
+                    flag = True
+                elif not flag:
+                    raise ValueError("unknown format "+str(location))
+                self.is_ziped = False
 
     def load_as_image(self):
         if self.is_ziped:

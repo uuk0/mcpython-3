@@ -3,6 +3,7 @@ import PIL.Image
 import util.file
 import pyglet
 import modloader.ResourceLocator
+import modloader.ResourceLocator
 
 
 class TextureAtlasHandler:
@@ -75,16 +76,19 @@ class TextureAtlas:
             if type(file) == PIL.Image.Image:
                 image = file
             else:
-                image = PIL.Image.open(file)
+                rlocator = modloader.ResourceLocator.ResourceLocation(file)
+                image = rlocator.load_as_image()
             if image.size[0] > self.maxsize[0]: self.maxsize[0] = image.size[0]
             if image.size[1] > self.maxsize[1]: self.maxsize[1] = image.size[1]
             if type(file) == PIL.Image.Image:
+                self.free_places -= 1
                 index = len(self.indexarray)
                 indexes.append(index)
                 self.indexarray[index] = [file, index]
             elif file in self.fileindexarray and type(file) == str:
                 indexes.append(self.fileindexarray[file])
             else:
+                self.free_places -= 1
                 index = len(self.indexarray)
                 indexes.append(index)
                 self.fileindexarray[file] = index
@@ -94,6 +98,7 @@ class TextureAtlas:
     def calculate_needed_space_for_files(self, files):
         need = len(files)
         for file in files:
-            if type(file) == str and file in self.fileindexarray: need -= 1
+            if type(file) == str and file in self.fileindexarray:
+                need -= 1
         return need
 

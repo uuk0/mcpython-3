@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:allium",
+  "files": ["assets/textures/block/allium.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

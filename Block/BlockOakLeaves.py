@@ -10,10 +10,10 @@ class OakLeaves(Block.IBlock.IBlock):
     def getName():
         return "minecraft:oak_leaves"
 
-    def is_solid_to(self, position):
+    def is_solid(self):
         return False
 
-    def get_drop(self):
+    def get_drop(self, itemstack):
         # todo: add sapling
         return {"minecraft:apple": 1} if random.randint(1, 20) == 1 else {}
 

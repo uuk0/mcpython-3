@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:dandelion",
+  "files": ["assets/textures/block/dandelion.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

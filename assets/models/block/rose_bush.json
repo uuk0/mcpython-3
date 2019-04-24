@@ -1,0 +1,15 @@
+{
+  "name": "minecraft:rose_bush",
+  "files": ["assets/textures/block/rose_bush_top.png",
+"assets/textures/block/rose_bush_bottom.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    },
+    {
+      "name": "cross",
+      "face": 1
+    }
+  ]
+}
