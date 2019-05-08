@@ -52,3 +52,6 @@ class Inventory:
     def overlay_draw(self):
         raise RuntimeError()
 
+
+class IInventoryBlocking(Inventory): pass
+

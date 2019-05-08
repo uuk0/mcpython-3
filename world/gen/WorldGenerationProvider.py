@@ -6,6 +6,8 @@ import globals as G
 import random
 import world.gen.feature.IFeature
 import util.vector
+import world.gen.biome.Biome
+import random
 
 
 class WorldGenerationProvider:
@@ -18,6 +20,7 @@ class WorldGenerationProvider:
         self.dimensionaccess = dimensionprovider
 
     def generate_chunk(self, chunk):
+        # G.modhandler.post_loading_phase("generation:chunk:start", chunk)
         print("generating chunk", chunk)
         G.window.set_caption('Mcpython build ' + str(G.CONFIG["BUILD"]) + " | world generation | "+str(chunk) +
                              " | landmass")
@@ -33,22 +36,33 @@ class WorldGenerationProvider:
         self.highmap.generate_for_chunk(chunk)
         G.window.set_caption('Mcpython build ' + str(G.CONFIG["BUILD"]) + " | world generation | " + str(chunk) +
                              " | adding blocks")
+
         for x in range(chunk[0]*16, chunk[0]*16+16):
             for z in range(chunk[1]*16, chunk[1]*16+16):
-                # print(self.landmassinfo[(x, z)])
                 biome = self.biomemap[(x, z)]
+                # bedrock layer
+                if biome.getBedrockType() != world.gen.biome.Biome.BedrockType.NONE:
+                    self.dimensionaccess.add_block((x, 0, z), "minecraft:bedrock", send_block_update=False,
+                                                   check_visable_state=True, check_neightbors=False)
+                if biome.getBedrockType() == world.gen.biome.Biome.BedrockType.DEFAULT:
+                    for y in range(1, 5):
+                        if random.randint(1, 2) == 1:
+                            self.dimensionaccess.add_block((x, y, z), "minecraft:bedrock", send_block_update=False,
+                                                           check_visable_state=False, check_neightbors=False)
+                # print(self.landmassinfo[(x, z)])
                 for element in self.highmap[(x, z)]:
                     m = element[1]-element[0]
                     for i in range(m+1):
                         y = i + element[0]
-                        if y >= element[2]:
-                            decorators = biome.getTopDecorator(x, z, element[1] - element[0] + 1)
-                            self.dimensionaccess.add_block((x, y, z), decorators[i], send_block_update=False,
-                                                           check_visable_state=i == m, check_neightbors=False)
-                        else:
-                            self.dimensionaccess.add_block((x, y, z), biome.getDownerMaterial(),
-                                                           send_block_update=False,
-                                                           check_visable_state=False, check_neightbors=False)
+                        if (x, y, z) not in self.dimensionaccess.get_chunk_for(chunk).world:
+                            if y >= element[2]:
+                                decorators = biome.getTopDecorator(x, z, element[1] - element[0] + 1)
+                                self.dimensionaccess.add_block((x, y, z), decorators[i], send_block_update=False,
+                                                               check_visable_state=i == m, check_neightbors=False)
+                            else:
+                                self.dimensionaccess.add_block((x, y, z), biome.getDownerMaterial(),
+                                                               send_block_update=False,
+                                                               check_visable_state=False, check_neightbors=False)
         G.window.set_caption('Mcpython build ' + str(G.CONFIG["BUILD"]) + " | world generation | " + str(chunk) +
                              " | placing structures")
         features = []
@@ -68,6 +82,9 @@ class WorldGenerationProvider:
                 biome = self.biomemap[(nx, nz)]
                 if random.randint(0, ifeature.get_properility()) == 0 and ifeature in biome.FEATURE_LIST:
                     ifeature.generate(nx, ny, nz, self)
+
+        # G.modhandler.post_loading_phase("generation:chunk:end", chunk)
+
         G.window.set_caption('Mcpython build ' + str(G.CONFIG["BUILD"]))
 
     def generate_chunks_in(self, start, end):

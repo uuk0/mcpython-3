@@ -73,17 +73,13 @@ class CrossTextureModelEntry(rendering.blockrenderer.IBlockRenderer.IBlockRender
         chunkaccess = G.worldaccess.get_active_dimension_access().get_chunk_for(chunk)
         batch = chunkaccess.alpha_batch if "enable_alpha" not in self.data or self.data["enable_alpha"] else \
             chunkaccess.batch  # here we are using reverse alpha / non alpha config
-        iblock.shown_data = [batch.add(24, pyglet.gl.GL_QUADS, textureatlas.pygletatlas,
-                                       ('v3f/static', cross_texture_1(x, y, z, 0.5)),
-                                       ('t2f/static', texture_data_1)),
-                             batch.add(24, pyglet.gl.GL_QUADS, textureatlas.pygletatlas,
-                                       ('v3f/static', cross_texture_2(x, y, z, 0.5)),
-                                       ('t2f/static', texture_data_2))
-                             ]
-
-    def hide(self, iblock):
-        for element in iblock.shown_data:
-            element.delete()
+        self.store_vertex_data(iblock, [batch.add(24, pyglet.gl.GL_QUADS, textureatlas.pygletatlas,
+                                                  ('v3f/static', cross_texture_1(x, y, z, 0.5)),
+                                                  ('t2f/static', texture_data_1)),
+                                        batch.add(24, pyglet.gl.GL_QUADS, textureatlas.pygletatlas,
+                                                  ('v3f/static', cross_texture_2(x, y, z, 0.5)),
+                                                  ('t2f/static', texture_data_2))
+                                        ])
 
     def is_part_of(self, position):
         box = self.data["box_size"] if "box_size" in self.data else (0.5, 0.5, 0.5)

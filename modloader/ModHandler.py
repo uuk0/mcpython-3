@@ -32,10 +32,10 @@ class ModHandler:
                         if os.path.isdir(path+"/"+spath):
                             if os.path.isfile(path+"/"+spath+"/mod.json"):
                                 mod_dirs.append(path+"/"+spath)
-                        elif zipfile.is_zipfile(path+"/"+spath):
-                            mod_c_dirs.append(path+"/"+spath)
-            elif zipfile.is_zipfile(path):
-                mod_c_dirs.append(path)
+                        # elif zipfile.is_zipfile(path+"/"+spath):
+                        #     mod_c_dirs.append(path+"/"+spath)
+            # elif zipfile.is_zipfile(path):
+            #     mod_c_dirs.append(path)
         for path in mod_dirs:
             with open(path+"/mod.json") as f:
                 self.active_mod_data = [path, json.load(f)]
@@ -129,6 +129,11 @@ class ModHandler:
         for modname in util.sorting.topological_sort([(x, depend_info[x]) for x in depend_info.keys()]):
             imod = self.mods[modname]
             phases_map[imod.getLoadMode()].append(imod)
+
+        print("the following order will be loaded:")
+        for phase in phases:
+            for imod in phases_map[phase]:
+                print(" -"+str(imod.getDisplayName()))
 
         for phase in phases:
             self.modorder += phases_map[phase]

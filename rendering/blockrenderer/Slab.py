@@ -48,9 +48,9 @@ class SlabModelEntry(rendering.blockrenderer.IBlockRenderer.IBlockRenderer):
 
     def get_texture_changes(self, start_index):
         self.indexes += [start_index+1, start_index+3]
-        return [{"type": "crop", "files": self.indexes[0], "arguments": [[[0, 0, 15, 7]]]},
+        return [{"type": "crop", "files": self.indexes[0], "arguments": [[[0, 7, 15, 15]]]},
                 {"type": "resize", "files": start_index, "arguments": [[64, 64]]},
-                {"type": "crop", "files": self.indexes[0], "arguments": [[[0, 7, 15, 15]]]},
+                {"type": "crop", "files": self.indexes[0], "arguments": [[[0, 0, 15, 7]]]},
                 {"type": "resize", "files": start_index+2, "arguments": [[64, 64]]}]
 
 

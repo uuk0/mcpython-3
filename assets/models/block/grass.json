@@ -1,11 +1,15 @@
 {
   "name": "minecraft:grass",
   "files": ["assets/textures/block/dirt.png", "assets/textures/block/grass_block_side.png",
-            "assets/textures/block/grass_top.png"],
+            "assets/textures/block/grass_top.png", "assets/textures/block/grass_block_snow.png"],
   "entrys": [
     {
       "name": "cube",
       "indexes": [2, 0, 1, 1, 1, 1]
+    },
+    {
+      "name": "cube",
+      "indexes": [2, 0, 3, 3, 3, 3]
     }
   ]
 }

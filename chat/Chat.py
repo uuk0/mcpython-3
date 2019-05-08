@@ -32,6 +32,8 @@ for _key in KEYBOARD["lower"].keys():
 class Chat(gui.Inventory.Inventory):
     def __init__(self):
         self.text = ""
+        self.history = []
+        self.historyindex = -1
         self.init((0, 0))
         self.__blink_state = False
         self.__blink_timer = 0
@@ -73,6 +75,7 @@ class Chat(gui.Inventory.Inventory):
                 while len(text) > 0 and text[-1] == "_":
                     text = text[:-1]
                 G.commandparser.parse_command(text)
+                self.history.insert(0, text)
             elif modifiers & key.LSHIFT:
                 if ikey in KEYBOARD["upper"]:
                     self.add_text(KEYBOARD["upper"][ikey])
@@ -82,6 +85,15 @@ class Chat(gui.Inventory.Inventory):
             else:
                 if ikey in KEYBOARD["lower"]:
                     self.add_text(KEYBOARD["lower"][ikey])
+                elif ikey == key.UP and self.historyindex < len(self.history) - 1:
+                    self.historyindex += 1
+                    self.text = self.history[self.historyindex]
+                elif ikey == key.DOWN and self.historyindex >= 0:
+                    self.historyindex -= 1
+                    if self.historyindex == -1:
+                        self.text = ""
+                    else:
+                        self.text = self.history[self.historyindex]
 
     def add_text(self, text):
         if self.__blink_state:
@@ -97,11 +109,13 @@ class Chat(gui.Inventory.Inventory):
 
     def on_close(self):
         self.text = ""
+        self.historyindex = -1
         self.__blink_state = False
         self.__blink_timer = 0
 
     def on_open(self):
         self.text = ""
+        self.historyindex = -1
         self.__blink_state = False
         self.__blink_timer = 0
 

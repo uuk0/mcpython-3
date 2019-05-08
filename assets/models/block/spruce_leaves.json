@@ -1,0 +1,11 @@
+{
+  "name": "minecraft:spruce_leaves",
+  "files": ["tmp/blocks/leaves/spruce_leave_default.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0],
+      "enable_alpha": true
+    }
+  ]
+}

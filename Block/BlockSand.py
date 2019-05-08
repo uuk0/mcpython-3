@@ -1,9 +1,9 @@
-import Block.IBlock
+import Block.IFallingBlock
 import globals as G
 
 
 @G.blockhandler
-class Sand(Block.IBlock.IBlock):
+class Sand(Block.IFallingBlock.IFallingBlock):
     @staticmethod
     def getName():
         return "minecraft:sand"

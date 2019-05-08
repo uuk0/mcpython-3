@@ -1,15 +1,15 @@
 
-import Block.IBlock
+import Block.IFallingBlock
 import globals as G
 
 
 @G.blockhandler
-class Gravel(Block.IBlock.IBlock):
+class Gravel(Block.IFallingBlock.IFallingBlock):
     @staticmethod
     def getName():
         return "minecraft:gravel"
 
-    def get_drop(self):
-        #todo: add flint
+    def get_drop(self, itemstack):
+        # todo: add flint
         return {self.getName(): 1}
 

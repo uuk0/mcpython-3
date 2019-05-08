@@ -4,6 +4,7 @@ import math
 import world.WorldAccess
 import util.vector, util.vertices
 import texture.BlockItemFactory
+import gui.Inventory
 
 from pyglet.window import key, mouse
 
@@ -169,7 +170,8 @@ class Window(pyglet.window.Window):
             self.sector = sector
         m = 8
         dt = min(dt, 0.2)
-        if texture.BlockItemFactory.dummyinventoryblockitemfactory not in G.inventoryhandler.visable_inventorys:
+        if not any([issubclass(type(inventory), gui.Inventory.IInventoryBlocking) for inventory in
+                   G.inventoryhandler.visable_inventorys]):
             for _ in range(m):
                 self._update(dt / m)
         if self.dy < 0.1 and self.is_pressing_space and self.on_ground: # and self.time_since_on_ground > 0.5:
@@ -177,7 +179,8 @@ class Window(pyglet.window.Window):
         # print(self.time_since_on_ground)
         if G.inventoryhandler.should_game_freeze():
             G.inventoryhandler.send_event("update", dt)
-        if self.position[1] < -100:
+        if self.position[1] < -100 and not any([issubclass(type(inventory), gui.Inventory.IInventoryBlocking)
+                                                for inventory in G.inventoryhandler.visable_inventorys]):
             G.player.kill()
 
     def _update(self, dt):
@@ -510,6 +513,7 @@ class Window(pyglet.window.Window):
         """
         self.clear()
         self.set_3d()
+        pyglet.gl.glClearColor(0.5, 0.69, 1.0, 1)
         pyglet.gl.glColor3d(1, 1, 1)
         if G.inventoryhandler.should_game_freeze():
             G.inventoryhandler.send_event("draw_3d_start")

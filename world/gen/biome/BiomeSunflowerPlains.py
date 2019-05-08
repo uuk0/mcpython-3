@@ -26,6 +26,10 @@ class BiomeSunflowerPlains(world.gen.biome.Biome.Biome):
     def getStretchFactor():
         return 30
 
+    @staticmethod
+    def getTemperature():
+        return 0.8
+
 
 G.biomehandler.register(BiomeSunflowerPlains, super_biome=world.gen.biome.BiomePlains.BiomePlains)
 

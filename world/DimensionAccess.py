@@ -32,3 +32,9 @@ class DimensionAccess:
     def cleanup(self):
         self.chunks = {}
 
+    def get_chunk_for_position(self, position, generate=True, create=True) -> world.ChunkAccess.ChunkAccess:
+        return self.get_chunk_for(util.vector.sectorize(position), generate=generate, create=create)
+
+    def get_block(self, position, raise_exc=True):
+        return self.get_chunk_for_position(position, generate=False).get_block(position, raise_exc=raise_exc)
+

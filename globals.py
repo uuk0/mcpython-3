@@ -40,3 +40,4 @@ itemconstructor = None
 
 modhandler = None
 
+stageloadhandler = None

@@ -1,5 +1,6 @@
 import util.vertices
 import globals as G
+import util.vector
 
 
 class IBlock:
@@ -11,9 +12,29 @@ class IBlock:
         self.position = position
         self.previous = previous
         self.hitposition = hitposition
-        self.is_visable = None  # todo: implement these to system
+        self.is_visable = None
         self.shown_data = None
+        self.injected_redstone_value = 0
         # self.on_create()
+
+    def inject_redstone_value(self, value):
+        if value > 15 or value < 0: return  # value range!!!
+        if not self.is_redstone_power_able(): return
+        if value > self.injected_redstone_value:
+            self.injected_redstone_value = value
+        chunkaccess = G.worldaccess.get_active_dimension_access().get_chunk_for_position(self.position)
+        x, y, z = self.position
+        for dx in range(-1, 2):
+            for dy in range(-1, 2):
+                for dz in range(-1, 2):
+                    if [dx, dy, dz].count(0) >= 2:
+                        nx, ny, nz = x + dx, y + dy, z + dz
+                        chunkaccess = G.worldaccess.get_active_dimension_access().get_chunk_for(
+                            util.vector.sectorize((nx, ny, nz)))
+                        iblock = chunkaccess.get_block((nx, ny, nz), raise_exc=False)
+                        if iblock:
+                            iblock.on_block_update(reason=self.position)
+        self.on_redstone_update()
 
     def on_visabel_state_check(self):
         pass
@@ -76,3 +97,12 @@ class IBlock:
     def build_item(): return True
 
     def can_player_walk_through(self): return False
+
+    def is_redstone_power_able(self): return self.is_solid()
+
+    def on_redstone_update(self):
+        pass
+
+    def on_random_block_update(self):
+        pass
+

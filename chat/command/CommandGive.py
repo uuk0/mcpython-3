@@ -17,6 +17,7 @@ class Give(chat.command.ICommand.ICommand):
 
     @staticmethod
     def execute_command(line, parsed_values):
+        # print(line, parsed_values)
         for player in parsed_values[0]:
             player.add_to_free_place(parsed_values[1], 1 if len(line) == 3 else int(line[3]))
 

@@ -10,6 +10,7 @@ import Block.ILog
 import Block.ISlab
 import traceback
 import modloader.events.LoadStageEvent
+import texture.TextureChanger
 
 
 class IModelTransformer:
@@ -59,6 +60,8 @@ class ModelHandler:
         m = list(self.models.values())
         for model in m:
             model.generate()
+        for model in m:
+            model.create_files()
 
     def generate_atlases(self, *args):
         m = list(self.models.values())
@@ -66,15 +69,22 @@ class ModelHandler:
         m.sort(key=lambda model: len(model.files), reverse=True)
         for model in m:
             model.create_files()
+            # print(model.files)
 
     def show(self, block):
         # block = G.model.world[position]
         file = block.get_model_name()
         if file not in self.modelindex or \
                 block.get_active_model_index() >= len(self.modelindex[block.get_model_name()].entrys):
+            # print(self.modelindex)
+            # print(self.modelindex["minecraft:missing_texture"].entrys)
             self.modelindex["minecraft:missing_texture"].entrys[0].show(block)
         else:
-            self.modelindex[block.get_model_name()].entrys[block.get_active_model_index()].show(block)
+            try:
+                self.modelindex[block.get_model_name()].entrys[block.get_active_model_index()].show(block)
+            except KeyError:
+                self.modelindex["minecraft:missing_texture"].entrys[0].show(block)
+                print("block", block, "has an texture exception")
 
     def hide(self, block):
         # block = G.model.world[position]
@@ -89,7 +99,7 @@ G.modelhandler = ModelHandler()
 
 
 import rendering.blockrenderer.IBlockRenderer
-from rendering.blockrenderer import (Box, Log, Slab, Cross)
+from rendering.blockrenderer import (Box, Log, Slab, Cross, IMultiRender)
 
 
 class Model:
@@ -108,6 +118,8 @@ class Model:
                 self.texturechanges += self.entrys[-1].get_texture_changes(len(self.files) + len(self.texturechanges))
             else:
                 raise ValueError("can't cast model entry data " + str(entry) + " to an model entry")
+        for iblockrenderer in self.entrys:
+            iblockrenderer.on_create()
         for element in self.texturechanges:
             name = element["type"]
             files = element["files"]
@@ -125,12 +137,12 @@ class Model:
 
     def create_files(self):
         self.indexes = G.textureatlashandler.add_images(self.files)
-        # print(self.name, self.indexes)
 
 
-@modloader.events.LoadStageEvent.model_load("minecraft")
-def load_models(*args):
-    for e in os.listdir(G.local+"/assets/models/block"):
-        if os.path.isfile(G.local+"/assets/models/block/"+e):
-            G.modelhandler.add_model(G.local+"/assets/models/block/"+e)
+for e in os.listdir(G.local+"/assets/models/block"):
+    if os.path.isfile(G.local+"/assets/models/block/"+e):
+        @modloader.events.LoadStageEvent.model_load("minecraft", "loading "+str(e.split(".")[0])+"-model",
+                                                    arguments=[e])
+        def load_file(eventname, filename):
+            G.modelhandler.add_model(G.local+"/assets/models/block/"+filename)
 

@@ -13,6 +13,21 @@ class Info:
     main_size = None
 
 
+def overlayhelper(mask, coloring):
+    mask = mask.convert("L")
+
+    image = PIL.Image.new("RGBA", mask.size, (0, 0, 0, 0))
+
+    for x in range(16):
+        for y in range(16):
+            color = mask.getpixel((x, y))
+            if color != 0:
+                image.putpixel((x, y), (color * coloring[0] // 255, color * coloring[1] // 255,
+                                              color * coloring[2] // 255, 255))
+
+    return image
+
+
 @modloader.events.LoadStageEvent.texture_setup("minecraft")
 def setup_textures(*args):
 
@@ -55,53 +70,20 @@ def setup_textures(*args):
 
     os.makedirs(G.local+"/tmp/blocks/leaves")
 
-    mask = PIL.Image.open(G.local+"/assets/textures/block/oak_leaves.png").convert("L")
+    overlayhelper(PIL.Image.open(G.local+"/assets/textures/block/oak_leaves.png"),
+                  (48, 116, 17)).save(G.local+"/tmp/blocks/leaves/oak_leave_default.png")
 
-    oak_leaves = PIL.Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-
-    for x in range(16):
-        for y in range(16):
-            color = mask.getpixel((x, y))
-            if color != 0:
-                oak_leaves.putpixel((x, y), (color * 48 // 255, color * 116 // 255, color * 17 // 255, 255))
-
-    oak_leaves.save(G.local+"/tmp/blocks/leaves/oak_leave_default.png")
+    overlayhelper(PIL.Image.open(G.local + "/assets/textures/block/spruce_leaves.png"),
+                  (48, 116, 17)).save(G.local + "/tmp/blocks/leaves/spruce_leave_default.png")
 
     # Grass (the block from which seeds drop)
 
-    mask = PIL.Image.open(G.local + "/assets/textures/block/grass.png").convert("L")
+    overlayhelper(PIL.Image.open(G.local + "/assets/textures/block/grass.png"),
+                  (50, 128, 17)).save(G.local + "/tmp/blocks/grass_small.png")
 
-    grass_small = PIL.Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    overlayhelper(PIL.Image.open(G.local + "/assets/textures/block/tall_grass_top.png"),
+                  (50, 128, 17)).save(G.local + "/tmp/blocks/tall_grass_top.png")
 
-    for x in range(16):
-        for y in range(16):
-            color = mask.getpixel((x, y))
-            if color != 0:
-                grass_small.putpixel((x, y), (color * 50 // 255, color * 128 // 255, color * 17 // 255, 255))
-
-    grass_small.save(G.local + "/tmp/blocks/grass_small.png")
-
-    mask = PIL.Image.open(G.local + "/assets/textures/block/tall_grass_top.png").convert("L")
-
-    grass_small = PIL.Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-
-    for x in range(16):
-        for y in range(16):
-            color = mask.getpixel((x, y))
-            if color != 0:
-                grass_small.putpixel((x, y), (color * 50 // 255, color * 128 // 255, color * 17 // 255, 255))
-
-    grass_small.save(G.local + "/tmp/blocks/tall_grass_top.png")
-
-    mask = PIL.Image.open(G.local + "/assets/textures/block/tall_grass_bottom.png").convert("L")
-
-    grass_small = PIL.Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-
-    for x in range(16):
-        for y in range(16):
-            color = mask.getpixel((x, y))
-            if color != 0:
-                grass_small.putpixel((x, y), (color * 50 // 255, color * 128 // 255, color * 17 // 255, 255))
-
-    grass_small.save(G.local + "/tmp/blocks/tall_grass_bottom.png")
+    overlayhelper(PIL.Image.open(G.local + "/assets/textures/block/tall_grass_bottom.png"),
+                  (50, 128, 17)).save(G.local + "/tmp/blocks/tall_grass_bottom.png")
 

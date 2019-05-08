@@ -1,5 +1,7 @@
 import globals as G
 import modloader.events.LoadStageEvent
+import os
+import importlib
 
 
 class CommandHandler:
@@ -18,9 +20,18 @@ class CommandHandler:
 G.commandhandler = CommandHandler()
 
 
-@modloader.events.LoadStageEvent.commands("minecraft")
-def load_commands(eventname):
-    from . import (CommandGive, CommandClear, CommandGamemode, CommandReload, CommandGenerate, CommandHelp)
+for file in os.listdir(G.local+"/chat/command"):
+    if file.startswith("Command") and file not in ["CommandHandler.py",
+                                                   "CommandParser.py"]:
+        @modloader.events.LoadStageEvent.commands("minecraft", "loading "+str(file.split(".")[0]),
+                                                arguments=[file])
+        def load_file(eventname, filename):
+            importlib.import_module("chat.command."+str(filename.split(".")[0]))
+
+
+@modloader.events.LoadStageEvent.commands("minecraft", "loading CommandExport")
+def load_file(eventname):
+    importlib.import_module("chat.command.export.CommandExport")
 
 
 @modloader.events.LoadStageEvent.load_finished("minecraft")

@@ -36,5 +36,6 @@ def load_biomes(eventname):
     from world.gen.biome import (BiomeOcean)
 
     # land mask: land
-    from world.gen.biome import (BiomePlains, BiomeSunflowerPlains, BiomeDessert, BiomeDessertHills)
+    from world.gen.biome import (BiomePlains, BiomeSunflowerPlains, BiomeDessert, BiomeDessertHills, BiomeMountains,
+                                 BiomeGravellyMountains, BiomeWoodedMountains)
 

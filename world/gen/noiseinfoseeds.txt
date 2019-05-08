@@ -1,4 +1,10 @@
 seed * 100: LandMassInfo
 seed * 100 + 1: TemperatureMapInfo
-seed * 100 + 2: BiomeMapInfo
+seed * 100 + 2: BiomeMapInfo - base map
 seed * 100 + 3: GenerationHighInfo - base noise
+
+seed * 100 + 5: BiomeMapInfo - mutated selection
+
+seed * 100 + 20: BiomeMapInfo - mutated map
+
+seed * 100 + 40: BiomeMapInfo - mutated map - 2

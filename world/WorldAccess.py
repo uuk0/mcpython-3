@@ -13,6 +13,7 @@ class WorldAccess:
         G.worldaccess = self
         self.name = name
         if not seed: seed = random.randint(-SEED_LIMIT, SEED_LIMIT)
+        print("world seed: "+str(seed))
         self.seed = seed
         self.dimensions = {}
         self.player = world.player.Player()

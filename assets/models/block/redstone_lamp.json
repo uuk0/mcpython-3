@@ -1,0 +1,15 @@
+{
+  "name": "minecraft:redstone_lamp",
+  "files": ["assets/textures/block/redstone_lamp.png",
+            "assets/textures/block/redstone_lamp_on.png"],
+  "entrys": [
+    {
+      "name": "cube",
+      "indexes": [0, 0, 0, 0, 0, 0]
+    },
+    {
+      "name": "cube",
+      "indexes": [1, 1, 1, 1, 1, 1]
+    }
+  ]
+}

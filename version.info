@@ -1,3 +1,43 @@
+19w19:
+    Fixed bugs:
+        fixed bug: blocks that were added before generation are overwritten
+        fixed bug: biomes are missing temperature constant
+        fixed bug: when braking gravel, an exception is raised
+        fixed bug: deleting blocks sometimes remove them not from rendering batches
+        fixed bug: new chat @@ internal signature let CommandEntrys.SelectorEntry fail every time
+        fixed bug: via player.addToFreePlace you can create stacks with more than maxstacksize
+        fixed bug: when entering an non-valid texture entry, an exception is raised
+
+    World Generation:
+        changed biome size
+        added bedrock to world gen
+        added ores & ore-like generation objects
+        added Mountain-biome, Gravelly Mountain-Biome, Wooded Mountain-Biome
+        the seed of the world will now printed out into log
+
+    Chat:
+        added command history (not working?)
+        added /export biomemap store [<file>]-command
+        added /export help-command
+        added /setblock & /fill-command
+
+    Blocks:
+        added Snow-Block (not working)
+        grass block will now move to snowy grass block when snow on top
+        added spruce log & leaves
+        implemented redstone system & Redstone Lamp & Block
+        added Oak-Sapling
+
+    Items:
+        added snow
+
+    ModLoader:
+        added an Info for loaded mods
+        added stage-based loading system with rendering stored in modloader/stages
+
+    Crafting:
+        started writing an new crafting system
+
 19w17:
     Fixed bugs:
         some things are done outside their phases

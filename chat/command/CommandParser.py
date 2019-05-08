@@ -24,6 +24,7 @@ class CommandParser:
             else:
                 G.player.chat.print_msg("[ERROR] element "+str(index)+" is not valid command entry for "+
                                         str(icommandentry))
+                return
         return icommand.execute_command(splitted, values)
 
 

@@ -43,7 +43,32 @@ import modloader.events.LoadStageEvent
 
 G.modhandler.search_for_mods()
 
-G.modhandler.post_loading_phase("startup")
+import texture.TextureChanger
+import texture.TextureFactory
+import texture.ModelHandler
+
+import modloader.stages.StageLoadHandler
+import modloader.stages.ILoadingStage
+import modloader.stages.PluginPrepareStage
+import rendering.window
+
+
+def main():
+    window = rendering.window.Window(width=800, height=600, caption='Mcpython build '+str(G.CONFIG["BUILD"]),
+                                     resizable=True)
+    # Hide the mouse cursor and prevent the mouse from leaving the window.
+    window.set_exclusive_mouse(True)
+    setup.setup()
+    G.stageloadhandler.startup()
+    pyglet.app.run()
+
+
+if __name__ == '__main__':
+    main()
+    sys.exit(0)
+
+
+"""G.modhandler.post_loading_phase("startup")
 
 import texture.TextureFactory
 import texture.TextureChanger
@@ -52,7 +77,6 @@ import texture.TextureAtlas
 import gui.InventoryHandler
 import gui.PlayerInventory
 import Block.BlockHandler
-import rendering.window
 import texture.BlockItemFactory
 import world.gen.biome.BiomeHandler
 
@@ -113,3 +137,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+"""

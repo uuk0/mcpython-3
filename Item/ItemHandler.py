@@ -34,11 +34,12 @@ class ItemHandler:
 G.itemhandler = ItemHandler()
 
 
-@modloader.events.LoadStageEvent.items("minecraft")
-def load_items(*args):
-    for file in os.listdir(G.local+"/Item"):
-        if file.startswith("Item") and not file in ["ItemHandler.py"]:
-            importlib.import_module("Item."+str(file.split(".")[0]))
+for file in os.listdir(G.local+"/Item"):
+    if file.startswith("Item") and file not in ["ItemHandler.py", "ItemConstructor.py"]:
+        @modloader.events.LoadStageEvent.items("minecraft", "loading "+str(file.split(".")[0]),
+                                                arguments=[file])
+        def load_file(eventname, filename):
+            importlib.import_module("Item."+str(filename.split(".")[0]))
 
 
 import Item.ItemConstructor

@@ -10,35 +10,39 @@ class ItemConstructor:
 
     def construct_item(self, name, itemfile=G.local+"/tmp/missing_texture.png", has_block=False,
                        toolgroups=[], toollevel=0, duribility=0):
-        @G.itemhandler
-        class ConstructedItem(Item.IItem.IItem if len(toolgroups) == 0 else Item.ITool.ITool):
-            @staticmethod
-            def getName():
-                return name
+        @modloader.events.LoadStageEvent.items("minecraft", action="loading item "+str(name),
+                                                    arguments=[name, itemfile, has_block, toolgroups, toollevel,
+                                                               duribility])
+        def load_item(eventname, itemname, itemfilepath, hasblock, toolgroupsnot, toollevelinfo,
+                      duribilityinfo):
+            @G.itemhandler
+            class ConstructedItem(Item.IItem.IItem if len(toolgroupsnot) == 0 else Item.ITool.ITool):
+                @staticmethod
+                def getName():
+                    return itemname
 
-            def getItemFile(self):
-                return itemfile
+                def getItemFile(self):
+                    return itemfilepath
 
-            @staticmethod
-            def has_block():
-                return has_block
+                @staticmethod
+                def has_block():
+                    return hasblock
 
-            @staticmethod
-            def get_tool_types():
-                return toolgroups
+                @staticmethod
+                def get_tool_types():
+                    return toolgroupsnot
 
-            def get_tool_level(self):
-                return toollevel
+                def get_tool_level(self):
+                    return toollevelinfo
 
-            def get_max_durability(self):
-                return duribility
+                def get_max_durability(self):
+                    return duribilityinfo
 
 
 G.itemconstructor = ItemConstructor()
 
 
-@modloader.events.LoadStageEvent.model_load("minecraft")
-def load_models(name):
+def load_models():
 
     # normal items
 
@@ -55,6 +59,7 @@ def load_models(name):
     G.itemconstructor.construct_item("minecraft:emerald", G.local + "/assets/textures/item/emerald.png")
     G.itemconstructor.construct_item("minecraft:lapis_lazuli", G.local + "/assets/textures/item/lapis_lazuli.png")
     G.itemconstructor.construct_item("minecraft:seed", G.local+"/assets/textures/item/wheat_seeds.png")
+    G.itemconstructor.construct_item("minecraft:snow", G.local + "/assets/textures/item/snowball.png")
 
     # tools
     G.itemconstructor.construct_item("minecraft:wood_shovel", G.local + "/assets/textures/item/wooden_shovel.png",
@@ -149,5 +154,9 @@ def load_models(name):
                                      has_block=True)
     G.itemconstructor.construct_item("minecraft:wither_rose", G.local + "/assets/textures/block/wither_rose.png",
                                      has_block=True)
+    G.itemconstructor.construct_item("minecraft:oak_sapling", G.local + "/assets/textures/block/oak_sapling.png",
+                                     has_block=True)
 
+
+load_models()
 

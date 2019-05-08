@@ -1,0 +1,10 @@
+{
+  "name": "minecraft:oak_sapling",
+  "files": ["assets/textures/block/oak_sapling.png"],
+  "entrys": [
+    {
+      "name": "cross",
+      "face": 0
+    }
+  ]
+}

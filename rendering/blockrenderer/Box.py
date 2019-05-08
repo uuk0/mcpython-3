@@ -31,14 +31,10 @@ class BoxModelEntry(rendering.blockrenderer.IBlockRenderer.IBlockRenderer):
         chunkaccess = G.worldaccess.get_active_dimension_access().get_chunk_for(chunk)
         batch = chunkaccess.batch if "enable_alpha" not in self.data or not self.data["enable_alpha"] else \
             chunkaccess.alpha_batch
-        iblock.shown_data = batch.add(24, pyglet.gl.GL_QUADS, textureatlas.pygletatlas,
+        shown_data = batch.add(24, pyglet.gl.GL_QUADS, textureatlas.pygletatlas,
                                       ('v3f/static', vertex_data),
                                       ('t2f/static', texture_data))
-
-    def hide(self, iblock):
-        if not iblock.shown_data: return
-        iblock.shown_data.delete()
-        iblock.shown_data = None
+        self.store_vertex_data(iblock, [shown_data])
 
     def is_part_of(self, position):
         box = self.data["box_size"] if "box_size" in self.data else (0.5, 0.5, 0.5)

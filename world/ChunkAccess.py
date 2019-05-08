@@ -30,7 +30,8 @@ class ChunkAccess:
         if position in self.world:
             self.remove_block(position, check_neightbors=False, send_block_update=False)
         if type(block) == str:
-            if block not in G.blockhandler.blocks: raise ValueError("can't access block named "+str(block))
+            if block not in G.blockhandler.blocks:
+                raise ValueError("can't access block named "+str(block))
             block = G.blockhandler.blocks[block](position,
                                                  *arguments[0], **arguments[1])
         elif type(block) not in G.blockhandler.blocks.values():
@@ -41,7 +42,7 @@ class ChunkAccess:
             except:
                 raise ValueError("can't create any block from "+str(block))
         else:
-            block.position = util.vector.unrelative_position(position, self.position)
+            block.position = position
         self.world[position] = block
         block.on_create()
         block.position = position
@@ -116,7 +117,11 @@ class ChunkAccess:
     def show_block(self, position):
         iblock = self.get_block(position)
         if iblock:
-            G.modelhandler.show(iblock)
+            try:
+                G.modelhandler.show(iblock)
+            except:
+                print(iblock)
+                raise
         iblock.visable = True
 
     def hide_block(self, position):
@@ -138,6 +143,8 @@ class ChunkAccess:
                             iblock = chunkaccess.get_block((nx, ny, nz), raise_exc=False)
                             if not (iblock and iblock.is_solid()):
                                 return True
+                        else:
+                            return True
         return False
 
     def get_block(self, position, raise_exc=True):

@@ -1,6 +1,12 @@
 import globals as G
 
 
+class BedrockType:
+    DEFAULT = "enum:bedrocktype:default"
+    FLAT = "enum:bedrocktype:flat"
+    NONE = "enum:bedrocktype:none"
+
+
 class Biome:
     FEATURE_LIST = []
 
@@ -26,7 +32,7 @@ class Biome:
 
     @staticmethod
     def getMutationChance():
-        return 10
+        return 30
 
     @staticmethod
     def getTemperature():
@@ -43,4 +49,8 @@ class Biome:
     @staticmethod
     def getDownerMaterial():
         return "minecraft:stone"
+
+    @staticmethod
+    def getBedrockType():
+        return BedrockType.DEFAULT
 

@@ -3,7 +3,7 @@ import gui.player.IPlayerInventoryMode
 import texture.TextureFactory
 import pyglet
 import gui.Slot
-import crafting.CraftingHandler
+# import crafting.CraftingHandler
 
 
 class Main(gui.player.IPlayerInventoryMode.IPlayerInventoryMode):
